@@ -1,8 +1,8 @@
 ﻿namespace Api.Common;
 
-  public enum Gender
-  {
-      Female,
-      Male,
-      Other
-  }
+public enum Gender
+{
+  Female,
+  Male,
+  Other
+}
