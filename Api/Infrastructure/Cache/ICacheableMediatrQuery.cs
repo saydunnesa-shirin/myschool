@@ -2,6 +2,6 @@
 
 public interface ICacheableMediatrQuery
 {
-    bool BypassCache { get; init; }
-    string CacheKey { get; }
+  bool BypassCache { get; init; }
+  string CacheKey { get; }
 }
