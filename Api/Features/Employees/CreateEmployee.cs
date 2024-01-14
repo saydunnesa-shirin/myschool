@@ -1,27 +1,15 @@
 using Api.Domain.Employees;
-using Api.Infrastructure.Cache;
 using AutoMapper;
 using MediatR;
 
 namespace Api.Features.Employees;
 
-public class GetEmployee
+public class CreateEmployee
 {
-  public record Query : IRequest<Result> //, ICacheableMediatrQuery
+  public record Command : IRequest<Result>
   {
-    public int Id { get; set; }
-    //bool ICacheableMediatrQuery.BypassCache { get; init; }
-
-    //string ICacheableMediatrQuery.CacheKey
-    //{
-    //  get
-    //  {
-    //    var baseKey = "get_employee";
-    //    var emailKey = $"-Id={Id}";
-
-    //    return $"{baseKey}{emailKey}";
-    //  }
-    //}
+    public string FirstName { get; set; }
+    public string LastName {  get; set; }
   }
 
   public record Result
@@ -31,7 +19,7 @@ public class GetEmployee
     public string LastName { get; set; } = string.Empty;
   }
 
-  public class Handler : IRequestHandler<Query, Result>
+  public class Handler : IRequestHandler<Command, Result>
   {
     private readonly IMapper _mapper;
     private readonly IEmployeesRepository _repository;
@@ -48,12 +36,16 @@ public class GetEmployee
     }
 
     public async Task<Result> Handle(
-      Query query,
+      Command command,
       CancellationToken cancellationToken)
     {
-      var employee =
-        await _repository.GetEmployeeAsync(query.Id, cancellationToken);
-      var mappedEmployee = _mapper.Map<Employee, Result>(employee);
+      var employeeToCreate = new Employee
+      {
+        FirstName = command.FirstName,
+        LastName = command.LastName
+      };
+      await _repository.CreateEmployeeAsync(employeeToCreate, cancellationToken);
+      var mappedEmployee = _mapper.Map<Employee, Result>(employeeToCreate);
 
       return mappedEmployee;
     }

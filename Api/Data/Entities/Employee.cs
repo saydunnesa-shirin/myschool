@@ -1,6 +1,7 @@
-namespace Api.Data.Entities;
+//namespace Api.Data.Entities;
 
-public class Employee
-{
-  
-}
+//public class Employee : BaseEntity
+//{
+//  public string? FirstName { get; set; }
+//  public string? LastName { get; set; }
+//}
