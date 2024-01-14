@@ -1,5 +1,5 @@
-using System.Reflection;
-using System.Text.Json.Serialization;
+using Api.Data.Entities;
+using Api.Extensions;
 using Api.Features.Employees;
 using Api.Infrastructure;
 using Api.Infrastructure.Authorization;
@@ -10,10 +10,13 @@ using Api.Infrastructure.Logging;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,51 +24,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(options =>
   options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+builder.Services.AddDbContext<MySchoolContext>(opt =>
+    opt.UseInMemoryDatabase("MySchool"));
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<GetEmployee>();
 builder.Services.AddHealthChecks();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-  options.SwaggerDoc("v1",
-    new OpenApiInfo
-    {
-      Title = "Customer Case Service API",
-      Description = "API microservice for CRM Customer Case Service", Version = "v1"
-    });
-  options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-  options.CustomSchemaIds(type =>
-    type.ToString().Replace(type.Namespace + ".", "").Replace("+", "."));
-
-  options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
-  {
-    Description = "ApiKey must appear in header",
-    Type = SecuritySchemeType.ApiKey,
-    Name = "X-Api-Key",
-    In = ParameterLocation.Header,
-    Scheme = "ApiKeyScheme"
-  });
-  var key = new OpenApiSecurityScheme
-  {
-    Reference = new OpenApiReference
-    {
-      Type = ReferenceType.SecurityScheme,
-      Id = "ApiKey"
-    },
-    In = ParameterLocation.Header
-  };
-  var requirement = new OpenApiSecurityRequirement
-  {
-    { key, new List<string>() }
-  };
-  options.AddSecurityRequirement(requirement);
-
-  var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-  options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-  options.ExampleFilters();
-});
-builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
+builder.Services.ConfigureSwagger();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -74,15 +40,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
   options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
-builder.Services.AddCors(options =>
-{
-  options.AddPolicy("CorsPolicy", builder =>
-  {
-    builder.AllowAnyOrigin()
-      .AllowAnyHeader()
-      .AllowAnyMethod();
-  });
-});
+builder.Services.ConfigureCors();
 
 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 if (new[] { "Development", "Staging", "Production" }.Contains(env))
