@@ -5,14 +5,15 @@ namespace Api.Domain.Employees;
 
 public class MappingProfiles : Profile
 {
-  public MappingProfiles()
-  {
-    GetList();
-  }
+    public MappingProfiles()
+    {
+        GetList();
+    }
 
-  private void GetList()
-  {
-    CreateMap<Employee, GetEmployee.Result>();
-    CreateMap<Employee, CreateEmployee.Result>();
-  }
+    private void GetList()
+    {
+        CreateMap<Employee, GetEmployee.Result>();
+        CreateMap<Employee, GetEmployees.Result>();
+        CreateMap<Employee, CreateEmployee.Result>();
+    }
 }
