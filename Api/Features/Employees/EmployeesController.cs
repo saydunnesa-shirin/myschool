@@ -47,7 +47,7 @@ public class EmployeesController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
     public async Task<ActionResult<List<GetEmployees.Result>>> GetEmployeesAsync(
-      Query query,
+      GetEmployees.Query query,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(query, cancellationToken));
