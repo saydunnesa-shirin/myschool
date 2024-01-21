@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
-using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -24,8 +23,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(options =>
   options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+}
+else
+{
+    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+}
 builder.Services.AddDbContext<MySchoolContext>(opt =>
-    opt.UseInMemoryDatabase("MySchool"));
+    opt.UseSqlServer(connection));
+
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<GetEmployee>();
 builder.Services.AddHealthChecks();
@@ -35,24 +46,24 @@ builder.Services.ConfigureSwagger();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-  options.JsonSerializerOptions.Converters.Add(
-    new JsonStringEnumConverter(new UpperCaseEnumValueNamingPolicy()));
-  options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.JsonSerializerOptions.Converters.Add(
+      new JsonStringEnumConverter(new UpperCaseEnumValueNamingPolicy()));
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
 builder.Services.ConfigureCors();
 
 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 if (new[] { "Development", "Staging", "Production" }.Contains(env))
-  //builder.Services.AddStackExchangeRedisCache(options =>
-  //{
-  //    var vaultSecretsConfig = builder.Configuration.GetSection("VaultSecretsConfiguration");
-  //    var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
-  //    options.Configuration = redisConnectionString.Replace("__REDIS_SECRET__", vaultSecretsConfig.GetValue<string>("REDIS_SECRET"));
-  //});
-  builder.Services.AddDistributedMemoryCache();
+    //builder.Services.AddStackExchangeRedisCache(options =>
+    //{
+    //    var vaultSecretsConfig = builder.Configuration.GetSection("VaultSecretsConfiguration");
+    //    var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+    //    options.Configuration = redisConnectionString.Replace("__REDIS_SECRET__", vaultSecretsConfig.GetValue<string>("REDIS_SECRET"));
+    //});
+    builder.Services.AddDistributedMemoryCache();
 else
-  builder.Services.AddDistributedMemoryCache();
+    builder.Services.AddDistributedMemoryCache();
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
 builder.Services.Configure<AppConfiguration>(builder.Configuration.GetSection("AppConfiguration"));
@@ -82,17 +93,17 @@ var app = builder.Build();
 // App Configuration
 if (app.Environment.IsDevelopment())
 {
-  // pragma exclusion is for a false-positive SQ flag asking to confirm this is ran only outside of Production environment
+    // pragma exclusion is for a false-positive SQ flag asking to confirm this is ran only outside of Production environment
 #pragma warning disable S4507
-  app.UseDeveloperExceptionPage();
+    app.UseDeveloperExceptionPage();
 #pragma warning restore S4507
 }
 
 if (app.Environment.IsEnvironment("LocalDevelopment"))
 {
-  builder.Configuration.AddEnvironmentVariables()
-    .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
-  app.UseDeveloperExceptionPage();
+    builder.Configuration.AddEnvironmentVariables()
+      .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
+    app.UseDeveloperExceptionPage();
 }
 
 // Global error handling
@@ -102,11 +113,11 @@ app.AddGlobalErrorHandler();
 // Serilog RequestLogging - important to invoke here, before MVC calls
 app.UseSerilogRequestLogging(opts =>
   {
-    opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
-    opts.GetLevel = LogHelper.ExcludeHealthChecks;
-    opts.IncludeQueryInRequestPath = true;
-    opts.MessageTemplate =
-      "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed} ms";
+      opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
+      opts.GetLevel = LogHelper.ExcludeHealthChecks;
+      opts.IncludeQueryInRequestPath = true;
+      opts.MessageTemplate =
+        "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed} ms";
   }
 );
 
@@ -115,11 +126,11 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 app.UseSwagger(options =>
 {
-  options.PreSerializeFilters.Add((doc, req) =>
-  {
-    var basePath = "/api";
-    doc.Servers = new List<OpenApiServer> { new() { Url = $"https://{req.Host.Value}{basePath}" } };
-  });
+    options.PreSerializeFilters.Add((doc, req) =>
+    {
+        var basePath = "/api";
+        doc.Servers = new List<OpenApiServer> { new() { Url = $"https://{req.Host.Value}{basePath}" } };
+    });
 });
 app.UseSwaggerUI();
 app.UsePathBase("/api");
@@ -144,24 +155,24 @@ app.UseMiddleware<ApiKeyMiddleware>();
 // Startup with Log.CloseAndFlush
 try
 {
-  Log.Information("Starting web host");
-  app.Run();
-  return 0;
+    Log.Information("Starting web host");
+    app.Run();
+    return 0;
 }
 catch (Exception ex)
 {
-  Log.Fatal(ex, "Host terminated unexpectedly");
-  return 1;
+    Log.Fatal(ex, "Host terminated unexpectedly");
+    return 1;
 }
 finally
 {
-  Log.CloseAndFlush();
+    Log.CloseAndFlush();
 }
 
 namespace Api
 {
-  // documented by Microsoft and necessary for test framework
-  public class Program
-  {
-  }
+    // documented by Microsoft and necessary for test framework
+    public class Program
+    {
+    }
 }
