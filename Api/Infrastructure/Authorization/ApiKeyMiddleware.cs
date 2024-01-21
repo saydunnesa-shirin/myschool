@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 
 namespace Api.Infrastructure.Authorization;
 
@@ -28,11 +28,11 @@ public class ApiKeyMiddleware
       return;
     }
 
-    if (!context.Request.Headers.TryGetValue(_apiKeyName, out var extractedApiKey))
-      throw new UnauthorizedAccessException("Api Key was not provided");
+    //if (!context.Request.Headers.TryGetValue(_apiKeyName, out var extractedApiKey))
+    //  throw new UnauthorizedAccessException("Api Key was not provided");
 
-    if (!_apiKey.Equals(extractedApiKey))
-      throw new UnauthorizedAccessException("Unauthorized client");
+    //if (!_apiKey.Equals(extractedApiKey))
+    //  throw new UnauthorizedAccessException("Unauthorized client");
 
     await _next(context);
   }

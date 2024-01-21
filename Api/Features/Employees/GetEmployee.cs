@@ -1,5 +1,5 @@
+using Api.Common;
 using Api.Domain.Employees;
-using Api.Infrastructure.Cache;
 using AutoMapper;
 using MediatR;
 
@@ -7,28 +7,13 @@ namespace Api.Features.Employees;
 
 public class GetEmployee
 {
-  public record Query : IRequest<Result> //, ICacheableMediatrQuery
+  public record Query : IRequest<Result>
   {
     public int Id { get; set; }
-    //bool ICacheableMediatrQuery.BypassCache { get; init; }
-
-    //string ICacheableMediatrQuery.CacheKey
-    //{
-    //  get
-    //  {
-    //    var baseKey = "get_employee";
-    //    var emailKey = $"-Id={Id}";
-
-    //    return $"{baseKey}{emailKey}";
-    //  }
-    //}
   }
 
-  public record Result
+  public record Result : BaseResult
   {
-    public int Id { get; set; }
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
   }
 
   public class Handler : IRequestHandler<Query, Result>

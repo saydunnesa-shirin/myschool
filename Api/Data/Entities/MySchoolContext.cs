@@ -12,10 +12,5 @@ public class MySchoolContext : DbContext
 
   public DbSet<Employee> Employees { get; set; }
 
-  //public string DbPath { get; }
-
-  //protected override void OnConfiguring(DbContextOptionsBuilder options)
-  //{
-  //  options.UseSqlite($"Data Source={DbPath}");
-  //}
+  
 }

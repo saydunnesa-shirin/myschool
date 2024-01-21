@@ -1,9 +1,8 @@
 using Api.Common;
-using Api.Data.Entities;
 
-namespace Api.Domain.Employees;
+namespace Api.Features.Employees;
 
-public class Employee : BaseEntity
+public record BaseResult
 {
   public int Id { get; set; }
   public int InstitutionId { get; set; }
@@ -19,10 +18,4 @@ public class Employee : BaseEntity
   public Designation Designation { get; set; }
   public string BloodGroup { get; set; } = string.Empty;
   public string EmployeeId { get; set; } = string.Empty;
-
-  // Additional
-  public string Address { get; set; } = string.Empty;
-  // other information
-  public string MotherName { get; set; } = string.Empty;
-  public string FatherName { get; set; } = string.Empty;
 }
