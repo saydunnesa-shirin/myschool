@@ -37,9 +37,9 @@ public class EmployeesController : ControllerBase
     }
 
     /// <remarks>
-    ///   Get single employee
+    ///   Get list of employees based on query filters
     /// </remarks>
-    [HttpGet]
+    [HttpPost("query")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<GetEmployees.Result>))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
