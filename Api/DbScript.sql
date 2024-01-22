@@ -45,3 +45,26 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+CREATE TABLE [Countries] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Iso2Code] nvarchar(max) NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [CreatedBy] int NOT NULL,
+    [UpdatedDate] datetime2 NOT NULL,
+    [UpdatedBy] int NOT NULL,
+    [IsActive] bit NOT NULL,
+    CONSTRAINT [PK_Countries] PRIMARY KEY ([Id])
+);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240122221657_Country', N'8.0.0');
+GO
+
+COMMIT;
+GO
+

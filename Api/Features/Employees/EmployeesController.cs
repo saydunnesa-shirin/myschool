@@ -28,7 +28,7 @@ public class EmployeesController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<GetEmployee.Result>> GetEmployeeAsync(
+    public async Task<ActionResult<GetEmployee.Result>> GetAsync(
       string id,
       CancellationToken cancellationToken)
     {
@@ -46,7 +46,7 @@ public class EmployeesController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<List<GetEmployees.Result>>> GetEmployeesAsync(
+    public async Task<ActionResult<List<GetEmployees.Result>>> GetListByQueryAsync(
       GetEmployees.Query query,
       CancellationToken cancellationToken)
     {
@@ -63,7 +63,7 @@ public class EmployeesController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<CreateEmployee.Result>> CreateEmployeeAsync(
+    public async Task<ActionResult<CreateEmployee.Result>> CreateAsync(
       Command command,
       CancellationToken cancellationToken)
     {

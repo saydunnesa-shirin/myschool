@@ -6,12 +6,12 @@ namespace Api.Features.Employees;
 
 public interface IEmployeesRepository
 {
-    Task<Employee> CreateEmployeeAsync(Employee newEmployee, CancellationToken cancellationToken);
-    Task<int?> DeleteEmployeeAsync(int id, CancellationToken cancellationToken);
-    Task<IEnumerable<Employee>> GetAllEmployeesAsync(CancellationToken cancellationToken);
-    Task<Employee> GetEmployeeAsync(int Id, CancellationToken cancellationToken);
-    Task<Employee> GetEmployeeByEmailAsync(string email, CancellationToken cancellationToken);
-    Task<Employee> UpdateEmployeeAsync(int id, Employee employee, CancellationToken cancellationToken);
+    Task<Employee> CreateAsync(Employee newEmployee, CancellationToken cancellationToken);
+    Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<Employee>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<Employee> GetAsync(int Id, CancellationToken cancellationToken);
+    Task<Employee> GetByEmailAsync(string email, CancellationToken cancellationToken);
+    Task<Employee> UpdateAsync(int id, Employee employee, CancellationToken cancellationToken);
 }
 
 public class EmployeesRepository : IEmployeesRepository
@@ -31,14 +31,14 @@ public class EmployeesRepository : IEmployeesRepository
 
     public int Id { get; private set; }
 
-    public async Task<Employee> CreateEmployeeAsync(Employee newEmployee, CancellationToken cancellationToken)
+    public async Task<Employee> CreateAsync(Employee newEmployee, CancellationToken cancellationToken)
     {
         _ = _context.Employees.Add(newEmployee);
         _ = await _context.SaveChangesAsync(cancellationToken);
         return newEmployee;
     }
 
-    public async Task<int?> DeleteEmployeeAsync(int id, CancellationToken cancellationToken)
+    public async Task<int?> DeleteAsync(int id, CancellationToken cancellationToken)
     {
         Employee deletableEmployee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
         if (deletableEmployee != null)
@@ -50,12 +50,12 @@ public class EmployeesRepository : IEmployeesRepository
         return null;
     }
 
-    public async Task<IEnumerable<Employee>> GetAllEmployeesAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Employee>> GetListByQueryAsync(CancellationToken cancellationToken)
     {
         return await _context.Employees.ToListAsync(cancellationToken);
     }
 
-    public async Task<Employee> GetEmployeeAsync(
+    public async Task<Employee> GetAsync(
       int Id,
       CancellationToken cancellationToken)
     {
@@ -66,12 +66,12 @@ public class EmployeesRepository : IEmployeesRepository
         return employee;
     }
 
-    public Task<Employee> GetEmployeeByEmailAsync(string email, CancellationToken cancellationToken)
+    public Task<Employee> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Employee> UpdateEmployeeAsync(int id, Employee employee, CancellationToken cancellationToken)
+    public Task<Employee> UpdateAsync(int id, Employee employee, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

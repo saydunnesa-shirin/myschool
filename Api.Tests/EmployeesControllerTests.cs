@@ -30,7 +30,7 @@ public class EmployeesControllerTests
       });
 
     // Act
-    var actionResult = await _employeesController.GetEmployeeAsync(
+    var actionResult = await _employeesController.GetAsync(
         "1",
         new CancellationToken());
 
