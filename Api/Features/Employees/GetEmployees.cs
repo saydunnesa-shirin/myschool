@@ -34,7 +34,7 @@ public class GetEmployees
         {
             List<Result> mappedEmployees = new List<Result>();
             var employees =
-              await _repository.GetAllEmployeesAsync(cancellationToken);
+              await _repository.GetListByQueryAsync(cancellationToken);
 
             foreach (var employee in employees)
             {

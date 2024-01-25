@@ -11,6 +11,19 @@ GO
 BEGIN TRANSACTION;
 GO
 
+CREATE TABLE [Countries] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Iso2Code] nvarchar(max) NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [CreatedBy] int NOT NULL,
+    [UpdatedDate] datetime2 NOT NULL,
+    [UpdatedBy] int NOT NULL,
+    [IsActive] bit NOT NULL,
+    CONSTRAINT [PK_Countries] PRIMARY KEY ([Id])
+);
+GO
+
 CREATE TABLE [Employees] (
     [Id] int NOT NULL IDENTITY,
     [InstitutionId] int NOT NULL,
@@ -18,13 +31,13 @@ CREATE TABLE [Employees] (
     [LastName] nvarchar(max) NOT NULL,
     [Title] nvarchar(max) NOT NULL,
     [DateOfBirth] datetime2 NOT NULL,
-    [Gender] int NULL,
+    [GenderId] int NOT NULL,
     [JoinDate] datetime2 NOT NULL,
     [Mobile] nvarchar(max) NOT NULL,
     [Email] nvarchar(max) NOT NULL,
-    [EmployeeType] int NOT NULL,
-    [Designation] int NOT NULL,
-    [BloodGroup] nvarchar(max) NOT NULL,
+    [EmployeeTypeId] int NOT NULL,
+    [DesignationId] int NOT NULL,
+    [BloodGroupId] int NOT NULL,
     [EmployeeId] nvarchar(max) NOT NULL,
     [Address] nvarchar(max) NOT NULL,
     [MotherName] nvarchar(max) NOT NULL,
@@ -39,7 +52,7 @@ CREATE TABLE [Employees] (
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20240121222117_Initial', N'8.0.0');
+VALUES (N'20240124221031_Initial', N'8.0.0');
 GO
 
 COMMIT;
