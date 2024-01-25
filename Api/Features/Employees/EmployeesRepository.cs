@@ -33,8 +33,16 @@ public class EmployeesRepository : IEmployeesRepository
 
     public async Task<Employee> CreateAsync(Employee newEmployee, CancellationToken cancellationToken)
     {
-        _ = _context.Employees.Add(newEmployee);
-        _ = await _context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            _ = _context.Employees.Add(newEmployee);
+            _ = await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
         return newEmployee;
     }
 

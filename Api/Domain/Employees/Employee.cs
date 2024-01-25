@@ -11,13 +11,13 @@ public class Employee : BaseEntity
     public string LastName { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
-    public Gender? Gender { get; set; }
+    public int GenderId { get; set; }
     public DateTime JoinDate { get; set; }
     public string Mobile { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public EmployeeType EmployeeType { get; set; }
-    public Designation Designation { get; set; }
-    public string BloodGroup { get; set; } = string.Empty;
+    public int EmployeeTypeId { get; set; }
+    public int DesignationId { get; set; }
+    public int BloodGroupId { get; set; }
     public string EmployeeId { get; set; } = string.Empty;
 
     // Additional

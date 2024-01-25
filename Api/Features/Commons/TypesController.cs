@@ -80,4 +80,28 @@ public class TypesController : Controller
 
         return Ok(list);
     }
+
+    /// <remarks>
+    ///   Get list of genders
+    /// </remarks>
+    [HttpGet("bloodgroups")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<TypeViewModel>))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public ActionResult<List<TypeViewModel>> GetBloodGroupsAsync()
+    {
+        var list = Enum.GetValues(typeof(BloodGroup))
+               .Cast<BloodGroup>()
+               .Select(t => new TypeViewModel
+               {
+                   Id = ((int)t),
+                   Name = t.ToString()
+               })
+               .ToList();
+
+        return Ok(list);
+    }
 }

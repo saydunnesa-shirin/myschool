@@ -1,4 +1,3 @@
-using Api.Common;
 using Api.Domain.Employees;
 using AutoMapper;
 using MediatR;
@@ -14,13 +13,13 @@ public class CreateEmployee
         public string LastName { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public DateTime DateOfBirth { get; set; }
-        public Gender? Gender { get; set; }
+        public int GenderId { get; set; }
         public DateTime JoinDate { get; set; }
         public string Mobile { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public EmployeeType EmployeeType { get; set; }
-        public Designation Designation { get; set; }
-        public string BloodGroup { get; set; } = string.Empty;
+        public int EmployeeTypeId { get; set; }
+        public int DesignationId { get; set; }
+        public int BloodGroupId { get; set; }
         public string EmployeeId { get; set; } = string.Empty;
     }
 
@@ -55,13 +54,13 @@ public class CreateEmployee
                 LastName = command.LastName,
                 Title = command.Title,
                 DateOfBirth = command.DateOfBirth,
-                Gender = command.Gender,
+                GenderId = command.GenderId,
                 JoinDate = command.JoinDate,
                 Mobile = command.Mobile,
                 Email = command.Email,
-                EmployeeType = command.EmployeeType,
-                Designation = command.Designation,
-                BloodGroup = command.BloodGroup,
+                EmployeeTypeId = command.EmployeeTypeId,
+                DesignationId = command.DesignationId,
+                BloodGroupId = command.BloodGroupId,
                 EmployeeId = command.EmployeeId
             };
             await _repository.CreateAsync(employeeToCreate, cancellationToken);
