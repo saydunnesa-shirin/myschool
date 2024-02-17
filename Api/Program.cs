@@ -2,6 +2,7 @@ using Api.Data.Entities;
 using Api.Extensions;
 using Api.Features.Countries;
 using Api.Features.Employees;
+using Api.Features.Institutions;
 using Api.Infrastructure;
 using Api.Infrastructure.Authorization;
 using Api.Infrastructure.Cache;
@@ -35,8 +36,11 @@ else
 {
     connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
 }
+//builder.Services.AddDbContext<MySchoolContext>(opt =>
+//    opt.UseSqlServer("Data Source=myschoolsrv001.database.windows.net;Initial Catalog=myschoolDb001;Persist Security Info=False;User ID=myschoolsa;Password=super_001;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
+
 builder.Services.AddDbContext<MySchoolContext>(opt =>
-    opt.UseSqlServer("Data Source=myschoolsrv001.database.windows.net;Initial Catalog=myschoolDb001;Persist Security Info=False;User ID=myschoolsa;Password=super_001;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
+    opt.UseSqlServer("Data Source=SHIRIN;Initial Catalog=myschoolDb001;Persist Security Info=False;User ID=sa;Password=Sql1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;"));
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<GetEmployee>();
@@ -75,6 +79,7 @@ builder.Services.AddScoped<ICorrelationIdGenerator, CorrelationIdGenerator>();
 
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IInstitutionsRepository, InstitutionsRepository>();
 
 // Serilog with Two-stage initialization, latter inits from appsettings.json
 Log.Logger = new LoggerConfiguration()

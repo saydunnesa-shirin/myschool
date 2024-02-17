@@ -9,6 +9,7 @@ namespace Api.Domain.Countries
         {
             CreateMap<Country, CreateCountry.Result>();
             CreateMap<Country, GetCountries.Result>();
+            CreateMap<Country, UpdateCountry.Result>();
         }
     }
 }

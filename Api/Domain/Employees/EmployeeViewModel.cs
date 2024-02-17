@@ -1,10 +1,8 @@
 using Api.Data.Entities;
-using Api.Domain.Countries;
-using Api.Domain.Institutions;
 
 namespace Api.Domain.Employees;
 
-public class Employee : BaseEntity
+public class EmployeeViewModel : BaseEntity
 {
     public string EmployeeId { get; set; } = string.Empty;
     public int InstitutionId { get; set; }
@@ -32,11 +30,5 @@ public class Employee : BaseEntity
     public string MotherName { get; set; } = string.Empty;
     public string FatherName { get; set; } = string.Empty;
 
-    //[ForeignKey("CountryId")]
-
-    public virtual Country Countries { get; set; }
-
-    //[ForeignKey("InstitutionId")]
-
-    public virtual Institution Institutions { get; set; }
+    public string CountryName { get; set; }
 }

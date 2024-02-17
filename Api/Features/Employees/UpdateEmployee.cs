@@ -1,14 +1,14 @@
 using Api.Domain.Employees;
-using Api.Domain.Institutions;
 using AutoMapper;
 using MediatR;
 
 namespace Api.Features.Employees;
 
-public class CreateEmployee
+public class UpdateEmployee
 {
     public record Command : IRequest<Result>
     {
+        public int Id { get; set; }
         public string EmployeeId { get; set; } = string.Empty;
         public int EmployeeTypeId { get; set; }
         public DateTime JoinDate { get; set; }
@@ -62,8 +62,9 @@ public class CreateEmployee
           Command command,
           CancellationToken cancellationToken)
         {
-            var employeeToCreate = new Employee
+            var employeeToUpdate = new Employee
             {
+                Id  = command.Id,
                 EmployeeId = command.EmployeeId,
                 JoinDate = command.JoinDate,
                 EmployeeTypeId = command.EmployeeTypeId,
@@ -86,8 +87,8 @@ public class CreateEmployee
                 FatherName = command.FatherName,
                 MotherName = command.MotherName
             };
-            
-            var seved = await _repository.CreateAsync(employeeToCreate, cancellationToken);
+
+            var seved = await _repository.UpdateAsync(employeeToUpdate, cancellationToken);
             var employee = await _repository.GetByIdyAsync(seved.Id, cancellationToken);
 
             var mappedEmployee = _mapper.Map<EmployeeViewModel, Result>(employee);

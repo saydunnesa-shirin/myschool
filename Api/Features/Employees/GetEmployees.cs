@@ -38,7 +38,7 @@ public class GetEmployees
 
             foreach (var employee in employees)
             {
-                var mappedEmployee = _mapper.Map<Employee, Result>(employee);
+                var mappedEmployee = _mapper.Map<EmployeeViewModel, Result>(employee);
                 mappedEmployees.Add(mappedEmployee);
             }
 

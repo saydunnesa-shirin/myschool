@@ -7,8 +7,11 @@ namespace Api.Features.Countries;
 public interface ICountriesRepository
 {
     Task<Country> CreateAsync(Country @new, CancellationToken cancellationToken);
+    Task<Country> UpdateAsync(Country country, CancellationToken cancellationToken);
+
     Task<IEnumerable<Country>> GetAllAsync(CancellationToken cancellationToken);
     Task<IEnumerable<Country>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
 }
 
 public class CountriesRepository : ICountriesRepository
@@ -41,5 +44,24 @@ public class CountriesRepository : ICountriesRepository
     public async Task<IEnumerable<Country>> GetListByQueryAsync(CancellationToken cancellationToken)
     {
         return await _context.Countries.ToListAsync(cancellationToken);
+    }
+
+    public async Task<Country> UpdateAsync(Country country, CancellationToken cancellationToken)
+    {
+        _ = _context.Countries.Update(country);
+        _ = await _context.SaveChangesAsync(cancellationToken);
+        return country;
+    }
+
+    public async Task<int?> DeleteAsync(int id, CancellationToken cancellationToken)
+    {
+        Country deletableCountry = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (deletableCountry != null)
+        {
+            _ = _context.Countries.Remove(deletableCountry);
+            _ = await _context.SaveChangesAsync(cancellationToken);
+            return id;
+        }
+        return null;
     }
 }

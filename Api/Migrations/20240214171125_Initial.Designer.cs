@@ -4,6 +4,7 @@ using Api.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(MySchoolContext))]
-    partial class MySchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240214171125_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,8 +156,6 @@ namespace Api.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.HasIndex("InstitutionId");
-
                     b.ToTable("Employees");
                 });
 
@@ -194,31 +195,10 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
-
                     b.ToTable("Institutions");
                 });
 
             modelBuilder.Entity("Api.Domain.Employees.Employee", b =>
-                {
-                    b.HasOne("Api.Domain.Countries.Country", "Countries")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Api.Domain.Institutions.Institution", "Institutions")
-                        .WithMany()
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Countries");
-
-                    b.Navigation("Institutions");
-                });
-
-            modelBuilder.Entity("Api.Domain.Institutions.Institution", b =>
                 {
                     b.HasOne("Api.Domain.Countries.Country", "Countries")
                         .WithMany()

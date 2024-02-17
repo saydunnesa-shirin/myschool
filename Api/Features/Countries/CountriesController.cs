@@ -34,6 +34,43 @@ public class CountriesController : Controller
     }
 
     /// <remarks>
+    ///   Update country
+    /// </remarks>
+    [HttpPut]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UpdateCountry.Result))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public async Task<ActionResult<UpdateCountry.Result>> UpdateAsync(
+      UpdateCountry.Command command,
+      CancellationToken cancellationToken)
+    {
+        return Ok(await _sender.Send(command, cancellationToken));
+    }
+
+    /// <remarks>
+    ///   Delete country
+    /// </remarks>
+    //[HttpDelete("{id}")]
+    [HttpDelete]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetCountries.Result))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public async Task<ActionResult<DeleteCountry>> DeleteAsync(
+      DeleteCountry.Command command,
+      CancellationToken cancellationToken)
+    {
+        return Ok(await _sender.Send(command, cancellationToken));
+
+        //return Ok(await _sender.Send(new DeleteCountry.Command() { Id = id} , cancellationToken));
+    }
+
+    /// <remarks>
     ///   Get list of employees based on query filters
     /// </remarks>
     [HttpPost("query")]
