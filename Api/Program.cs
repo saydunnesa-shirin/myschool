@@ -1,5 +1,8 @@
 using Api.Data.Entities;
 using Api.Extensions;
+using Api.Features.AcademicClasses;
+using Api.Features.AcademicSessions;
+using Api.Features.AcademicSessionTemplates;
 using Api.Features.Countries;
 using Api.Features.Employees;
 using Api.Features.Institutions;
@@ -80,6 +83,9 @@ builder.Services.AddScoped<ICorrelationIdGenerator, CorrelationIdGenerator>();
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IInstitutionsRepository, InstitutionsRepository>();
+builder.Services.AddScoped<IAcademicSessionTemplatesRepository, AcademicSessionTemplatesRepository>();
+builder.Services.AddScoped<IAcademicSessionsRepository, AcademicSessionsRepository>();
+builder.Services.AddScoped<IAcademicClassesRepository, AcademicClassesRepository>();
 
 // Serilog with Two-stage initialization, latter inits from appsettings.json
 Log.Logger = new LoggerConfiguration()
