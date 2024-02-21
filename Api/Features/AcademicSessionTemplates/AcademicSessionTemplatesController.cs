@@ -3,65 +3,65 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace Api.Features.Institutions;
+namespace Api.Features.AcademicSessionTemplates;
 
 [ApiController]
 [Route("[controller]")]
-public class InstitutionsController : Controller
+public class AcademicSessionTemplatesController : Controller
 {
     private readonly ISender _sender;
 
-    public InstitutionsController(ISender sender)
+    public AcademicSessionTemplatesController(ISender sender)
     {
         _sender = sender;
     }
 
     /// <remarks>
-    ///   Create institution
+    ///   Create AcademicSessionTemplate
     /// </remarks>
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateInstitution.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateAcademicSessionTemplate.Result))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<CreateInstitution.Result>> CreateAsync(
-      CreateInstitution.Command command,
+    public async Task<ActionResult<CreateAcademicSessionTemplate.Result>> CreateAsync(
+      CreateAcademicSessionTemplate.Command command,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(command, cancellationToken));
     }
 
     /// <remarks>
-    ///   Update institution
+    ///   Update AcademicSessionTemplate
     /// </remarks>
     [HttpPut]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UpdateInstitution.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UpdateAcademicSessionTemplate.Result))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<UpdateInstitution.Result>> UpdateAsync(
-      UpdateInstitution.Command command,
+    public async Task<ActionResult<UpdateAcademicSessionTemplate.Result>> UpdateAsync(
+      UpdateAcademicSessionTemplate.Command command,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(command, cancellationToken));
     }
 
     /// <remarks>
-    ///   Delete institution
+    ///   Delete AcademicSessionTemplate
     /// </remarks>
     [HttpDelete]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetInstitution.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetAcademicSessionTemplate.Result))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<DeleteInstitution>> DeleteAsync(
-      DeleteInstitution.Command command,
+    public async Task<ActionResult<DeleteAcademicSessionTemplate>> DeleteAsync(
+      DeleteAcademicSessionTemplate.Command command,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(command, cancellationToken));
@@ -71,34 +71,34 @@ public class InstitutionsController : Controller
     ///   Get list of institutions based on query filters
     /// </remarks>
     [HttpPost("query")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<GetInstitutions.Result>))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<GetAcademicSessionTemplates.Result>))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<List<GetInstitutions.Result>>> GetListByQueryAsync(
-      GetInstitutions.Query query,
+    public async Task<ActionResult<List<GetAcademicSessionTemplates.Result>>> GetListByQueryAsync(
+      GetAcademicSessionTemplates.Query query,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(query, cancellationToken));
     }
 
     /// <remarks>
-    ///   Get single institution
+    ///   Get single AcademicSessionTemplate
     /// </remarks>
     [HttpGet("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetInstitution.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetAcademicSessionTemplate.Result))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<GetInstitution.Result>> GetAsync(
+    public async Task<ActionResult<GetAcademicSessionTemplate.Result>> GetAsync(
       string id,
       CancellationToken cancellationToken)
     {
-        GetInstitution.Query query = new() { Id = Convert.ToInt32(id) };
+        GetAcademicSessionTemplate.Query query = new() { Id = Convert.ToInt32(id) };
         return Ok(await _sender.Send(query, cancellationToken));
     }
 }

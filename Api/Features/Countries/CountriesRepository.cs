@@ -31,8 +31,17 @@ public class CountriesRepository : ICountriesRepository
 
     public async Task<Country> CreateAsync(Country @new, CancellationToken cancellationToken)
     {
-        _ = _context.Countries.Add(@new);
-        _ = await _context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            _ = _context.Countries.Add(@new);
+            _ = await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+        
         return @new;
     }
 
@@ -48,20 +57,38 @@ public class CountriesRepository : ICountriesRepository
 
     public async Task<Country> UpdateAsync(Country country, CancellationToken cancellationToken)
     {
-        _ = _context.Countries.Update(country);
-        _ = await _context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            _ = _context.Countries.Update(country);
+            _ = await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+        
         return country;
     }
 
     public async Task<int?> DeleteAsync(int id, CancellationToken cancellationToken)
     {
-        Country deletableCountry = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        if (deletableCountry != null)
+        try
         {
-            _ = _context.Countries.Remove(deletableCountry);
-            _ = await _context.SaveChangesAsync(cancellationToken);
-            return id;
+            Country deletableCountry = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            if (deletableCountry != null)
+            {
+                _ = _context.Countries.Remove(deletableCountry);
+                _ = await _context.SaveChangesAsync(cancellationToken);
+                return id;
+            }
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+
         return null;
     }
 }

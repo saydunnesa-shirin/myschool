@@ -1,5 +1,4 @@
 using Api.Domain.Employees;
-using Api.Domain.Institutions;
 using AutoMapper;
 using MediatR;
 

@@ -1,5 +1,4 @@
 using Api.Data.Entities;
-using Api.Domain.Employees;
 using Api.Domain.Institutions;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,8 +33,16 @@ public class InstitutionsRepository : IInstitutionsRepository
 
     public async Task<Institution> CreateAsync(Institution @new, CancellationToken cancellationToken)
     {
-        _ = _context.Institutions.Add(@new);
-        _ = await _context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            _ = _context.Institutions.Add(@new);
+            _ = await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
         return @new;
     }
 
@@ -110,12 +117,20 @@ public class InstitutionsRepository : IInstitutionsRepository
 
     public async Task<int?> DeleteAsync(int id, CancellationToken cancellationToken)
     {
-        Institution deletableInstitution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        if (deletableInstitution != null)
+        try
         {
-            _ = _context.Institutions.Remove(deletableInstitution);
-            _ = await _context.SaveChangesAsync(cancellationToken);
-            return id;
+            Institution deletableInstitution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            if (deletableInstitution != null)
+            {
+                _ = _context.Institutions.Remove(deletableInstitution);
+                _ = await _context.SaveChangesAsync(cancellationToken);
+                return id;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
         }
         return null;
     }
