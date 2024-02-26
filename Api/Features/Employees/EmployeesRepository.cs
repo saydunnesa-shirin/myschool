@@ -7,12 +7,11 @@ namespace Api.Features.Employees;
 public interface IEmployeesRepository
 {
     Task<Employee> CreateAsync(Employee newEmployee, CancellationToken cancellationToken);
-    Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
-    Task<IEnumerable<EmployeeViewModel>> GetListByQueryAsync(CancellationToken cancellationToken);
-    Task<EmployeeViewModel> GetByIdyAsync(int id, CancellationToken cancellationToken);
-    Task<Employee> GetAsync(int Id, CancellationToken cancellationToken);
-    Task<Employee> GetByEmailAsync(string email, CancellationToken cancellationToken);
     Task<Employee> UpdateAsync(Employee employee, CancellationToken cancellationToken);
+    Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<EmployeeViewModel>> GetListByQueryAsync(EmployeeQuery query, CancellationToken cancellationToken);
+    Task<EmployeeViewModel> GetByIdyAsync(int id, CancellationToken cancellationToken);
+    Task<EmployeeViewModel> GetByEmailAsync(string email, CancellationToken cancellationToken);
 }
 
 public class EmployeesRepository : IEmployeesRepository
@@ -47,6 +46,21 @@ public class EmployeesRepository : IEmployeesRepository
         return newEmployee;
     }
 
+    public async Task<Employee> UpdateAsync(Employee employee, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _ = _context.Employees.Update(employee);
+            _ = await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+        return employee;
+    }
+
     public async Task<int?> DeleteAsync(int id, CancellationToken cancellationToken)
     {
         try
@@ -68,11 +82,14 @@ public class EmployeesRepository : IEmployeesRepository
         return null;
     }
 
-    public async Task<IEnumerable<EmployeeViewModel>> GetListByQueryAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<EmployeeViewModel>> GetListByQueryAsync(EmployeeQuery query, CancellationToken cancellationToken)
     {
         var result = (
                 from e in _context.Employees
                 join c in _context.Countries on e.CountryId equals c.Id
+                where 0 == 0
+                    && (query.DesignationId == null || e.DesignationId == query.DesignationId)
+                    && (query.InstitutionId == null || e.InstitutionId == query.InstitutionId)
                 select new EmployeeViewModel
                 {
                     Id = e.Id,
@@ -102,26 +119,49 @@ public class EmployeesRepository : IEmployeesRepository
                     UpdatedDate = e.UpdatedDate,
 
                     CountryName = c.Name
-                }
-                ).ToListAsync(cancellationToken);
+                }).ToListAsync(cancellationToken);
 
         return await result;
     }
 
-    public async Task<Employee> GetAsync(
-      int Id,
-      CancellationToken cancellationToken)
+    public async Task<EmployeeViewModel> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Getting employee information");
+        var result = (
+                 from e in _context.Employees
+                 join c in _context.Countries on e.CountryId equals c.Id
+                 where e.Email == email
+                 select new EmployeeViewModel
+                 {
+                     Id = e.Id,
+                     CountryId = e.CountryId,
+                     EmployeeId = e.EmployeeId,
+                     FirstName = e.FirstName,
+                     LastName = e.LastName,
+                     BloodGroupId = e.BloodGroupId,
+                     City = e.City,
+                     CreatedBy = e.CreatedBy,
+                     CreatedDate = e.CreatedDate,
+                     DateOfBirth = e.DateOfBirth,
+                     DesignationId = e.DesignationId,
+                     Email = e.Email,
+                     EmployeeTypeId = e.EmployeeTypeId,
+                     FatherName = e.FatherName,
+                     MotherName = e.MotherName,
+                     GenderId = e.GenderId,
+                     InstitutionId = e.InstitutionId,
+                     IsActive = e.IsActive,
+                     JoinDate = e.JoinDate,
+                     Mobile = e.Mobile,
+                     PostalCode = e.PostalCode,
+                     State = e.State,
+                     Street = e.Street,
+                     UpdatedBy = e.UpdatedBy,
+                     UpdatedDate = e.UpdatedDate,
 
-        Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
+                     CountryName = c.Name
+                 }).FirstOrDefaultAsync(cancellationToken);
 
-        return employee;
-    }
-
-    public Task<Employee> GetByEmailAsync(string email, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+        return await result;
     }
 
     public async Task<EmployeeViewModel> GetByIdyAsync(int id, CancellationToken cancellationToken)
@@ -163,20 +203,5 @@ public class EmployeesRepository : IEmployeesRepository
                 ).FirstOrDefaultAsync(cancellationToken);
 
         return await result;
-    }
-
-    public async Task<Employee> UpdateAsync(Employee employee, CancellationToken cancellationToken)
-    {
-        try
-        {
-            _ = _context.Employees.Update(employee);
-            _ = await _context.SaveChangesAsync(cancellationToken);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.Message);
-            throw;
-        }
-        return employee;
     }
 }

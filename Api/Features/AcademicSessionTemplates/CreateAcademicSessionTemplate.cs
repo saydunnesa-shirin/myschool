@@ -9,7 +9,6 @@ public class CreateAcademicSessionTemplate
     public record Command : IRequest<Result>
     {
         public string TemplateName { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
         public int InstitutionId { get; set; }
     }
 
