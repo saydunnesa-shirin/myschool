@@ -8,7 +8,8 @@ public class GetEmployees
 {
     public record Query : IRequest<List<Result>>
     {
-
+        public int? DesignationId { get; set; }
+        public int? InstitutionId { get; set; }
     }
 
     public record Result : BaseResult
@@ -32,17 +33,24 @@ public class GetEmployees
           Query query,
           CancellationToken cancellationToken)
         {
-            List<Result> mappedEmployees = new List<Result>();
-            var employees =
-              await _repository.GetListByQueryAsync(cancellationToken);
+            List<Result> mappedList = new();
+            IEnumerable<EmployeeViewModel> list;
 
-            foreach (var employee in employees)
+            var employeeQuery = new EmployeeQuery
             {
-                var mappedEmployee = _mapper.Map<EmployeeViewModel, Result>(employee);
-                mappedEmployees.Add(mappedEmployee);
+                DesignationId = query.DesignationId,
+                InstitutionId = query.InstitutionId
+            };
+           
+            list = await _repository.GetListByQueryAsync(employeeQuery, cancellationToken);
+
+            foreach (var employee in list)
+            {
+                var mapped = _mapper.Map<EmployeeViewModel, Result>(employee);
+                mappedList.Add(mapped);
             }
 
-            return mappedEmployees;
+            return mappedList;
         }
     }
 }

@@ -9,6 +9,7 @@ public class GetAcademicSessions
     public record Query : IRequest<List<Result>>
     {
         public int? Id { get; set; }
+        public int? InstitutionId { get; set; }
         public string Term { get; set; } = string.Empty;
     }
 
@@ -35,8 +36,12 @@ public class GetAcademicSessions
         {
             IEnumerable<AcademicSessionViewModel> list;
             List<Result> mappedList = new();
-            
-            list = await _repository.GetListByQueryAsync(cancellationToken);
+
+            if (query.InstitutionId != null)
+                list = await _repository.GetListByInstitutionAsync((int)query.InstitutionId, cancellationToken);
+            else
+                list = await _repository.GetListByQueryAsync(cancellationToken);
+
             foreach (var institution in list)
             {
                 var mapped = _mapper.Map<AcademicSessionViewModel, Result>(institution);

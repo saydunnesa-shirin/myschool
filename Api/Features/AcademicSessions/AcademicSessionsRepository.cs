@@ -11,6 +11,7 @@ public interface IAcademicSessionsRepository
 
     Task<IEnumerable<AcademicSessionViewModel>> GetAllAsync(CancellationToken cancellationToken);
     Task<IEnumerable<AcademicSessionViewModel>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicSessionViewModel>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken);
     Task<AcademicSessionViewModel> GetAsync(int id, CancellationToken cancellationToken);
 
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
@@ -90,6 +91,30 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
         var result = (
                 from a in _context.AcademicSessions
                 join i in _context.Institutions on a.InstitutionId equals i.Id
+                orderby a.StartDate descending
+
+                select new AcademicSessionViewModel
+                {
+                    Id = a.Id,
+                    InstitutionId = a.InstitutionId,
+                    Name = a.Name,
+                    Description = a.Description,
+                    StartDate = a.StartDate,
+                    EndDate = a.EndDate,
+                    InstitutionName = i.Name
+                }
+                ).ToListAsync(cancellationToken);
+
+        return await result;
+    }
+
+    public async Task<IEnumerable<AcademicSessionViewModel>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken)
+    {
+        var result = (
+                from a in _context.AcademicSessions
+                join i in _context.Institutions on a.InstitutionId equals i.Id
+                where a.InstitutionId == institutionId
+                orderby a.StartDate descending
                 select new AcademicSessionViewModel
                 {
                     Id = a.Id,

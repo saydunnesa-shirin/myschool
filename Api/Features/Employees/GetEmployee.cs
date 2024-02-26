@@ -32,8 +32,8 @@ public class GetEmployee
           Query query,
           CancellationToken cancellationToken)
         {
-            var employee = await _repository.GetAsync(query.Id, cancellationToken);
-            var mappedEmployee = _mapper.Map<Employee, Result>(employee);
+            var employee = await _repository.GetByIdyAsync(query.Id, cancellationToken);
+            var mappedEmployee = _mapper.Map<EmployeeViewModel, Result>(employee);
 
             return mappedEmployee;
         }

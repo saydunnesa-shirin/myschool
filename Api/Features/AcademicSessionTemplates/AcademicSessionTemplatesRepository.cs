@@ -11,6 +11,8 @@ public interface IAcademicSessionTemplatesRepository
 
     Task<IEnumerable<AcademicSessionTemplateViewModel>> GetAllAsync(CancellationToken cancellationToken);
     Task<IEnumerable<AcademicSessionTemplateViewModel>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicSessionTemplateViewModel>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken);
+
     Task<AcademicSessionTemplateViewModel> GetAsync(int id, CancellationToken cancellationToken);
 
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
@@ -76,6 +78,23 @@ public class AcademicSessionTemplatesRepository : IAcademicSessionTemplatesRepos
                     TemplateName = st.TemplateName,
                     InstitutionName = i.Name
                 }).FirstOrDefaultAsync(cancellationToken);
+
+        return await result;
+    }
+
+    public async Task<IEnumerable<AcademicSessionTemplateViewModel>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken)
+    {
+        var result = (
+                from st in _context.AcademicSessionTemplates
+                join i in _context.Institutions on st.InstitutionId equals i.Id
+                where st.InstitutionId == institutionId
+                select new AcademicSessionTemplateViewModel
+                {
+                    Id = st.Id,
+                    InstitutionId = st.InstitutionId,
+                    TemplateName = st.TemplateName,
+                    InstitutionName = i.Name
+                }).ToListAsync(cancellationToken);
 
         return await result;
     }
