@@ -46,9 +46,9 @@ public class UpdateAcademicClass
             };
             var updated = await _repository.UpdateAsync(@update, cancellationToken);
 
-            var institution = await _repository.GetAsync(updated.Id, cancellationToken);
+            var academicClass = await _repository.GetAsync(updated.Id, cancellationToken);
 
-            var mappedAcademicClass = _mapper.Map<AcademicClassViewModel, Result>(institution);
+            var mappedAcademicClass = _mapper.Map<AcademicClassViewModel, Result>(academicClass);
 
             return mappedAcademicClass;
         }

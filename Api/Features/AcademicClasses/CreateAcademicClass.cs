@@ -46,9 +46,9 @@ public class CreateAcademicClass
             };
             var saved = await _repository.CreateAsync(@new, cancellationToken);
 
-            var institution = await _repository.GetAsync(saved.Id, cancellationToken);
+            var academicClass = await _repository.GetAsync(saved.Id, cancellationToken);
 
-            var mappedAcademicClass = _mapper.Map<AcademicClassViewModel, Result>(institution);
+            var mappedAcademicClass = _mapper.Map<AcademicClassViewModel, Result>(academicClass);
 
             return mappedAcademicClass;
         }

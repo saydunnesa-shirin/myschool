@@ -1,4 +1,6 @@
-﻿namespace Api.Domain.AcademicSessions
+﻿using Api.Domain.AcademicClasses;
+
+namespace Api.Domain.AcademicSessions
 {
     public class AcademicSessionViewModel
     {
@@ -9,5 +11,7 @@
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string InstitutionName { get; set; } = string.Empty;
+
+        public IEnumerable<AcademicClassViewModel> AcademicClasses = null;
     }
 }
