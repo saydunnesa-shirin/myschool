@@ -93,7 +93,7 @@ public class AcademicClassesRepository : IAcademicClassesRepository
         return await result;
     }
 
-    public async Task<IEnumerable<AcademicClassViewModel>> GetListByQueryAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<AcademicClassViewModel>> GetListByQueryAsync( CancellationToken cancellationToken)
     {
         var result = (
                 from ac in _context.AcademicClasses
@@ -105,6 +105,7 @@ public class AcademicClassesRepository : IAcademicClassesRepository
                     Id = ac.Id,
                     InstitutionId = ac.InstitutionId,
                     AcademicSessionId = ac.AcademicSessionId,
+
                     TeacherId = ac.TeacherId,
                     Name = ac.Name,
                     InstitutionName = i.Name,

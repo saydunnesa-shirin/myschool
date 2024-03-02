@@ -1,4 +1,5 @@
 using Api.Data.Entities;
+using Api.Domain.AcademicClasses;
 using Api.Domain.AcademicSessions;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace Api.Features.AcademicSessions;
 public interface IAcademicSessionsRepository
 {
     Task<AcademicSession> CreateAsync(AcademicSession @new, CancellationToken cancellationToken);
+    Task<AcademicSession> CreateWithDetailsAsync(AcademicSession @new, IEnumerable<AcademicClass> academicClasses, CancellationToken cancellationToken);
     Task<AcademicSession> UpdateAsync(AcademicSession institution, CancellationToken cancellationToken);
 
     Task<IEnumerable<AcademicSessionViewModel>> GetAllAsync(CancellationToken cancellationToken);
@@ -47,6 +49,27 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
         return @new;
     }
 
+    public async Task<AcademicSession> CreateWithDetailsAsync(AcademicSession @new, IEnumerable<AcademicClass> academicClasses, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _ = _context.AcademicSessions.Add(@new);
+
+            foreach (var academicClass in academicClasses)
+            {
+                academicClass.AcademicSessions = @new;
+                _ = _context.AcademicClasses.Add(academicClass);
+            }
+            _ = await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+        return @new;
+    }
+
     public async Task<IEnumerable<AcademicSessionViewModel>> GetAllAsync(CancellationToken cancellationToken)
     {
         var result = (
@@ -68,6 +91,23 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
 
     public async Task<AcademicSessionViewModel> GetAsync(int id, CancellationToken cancellationToken)
     {
+        //var result = (
+        //        from a in _context.AcademicSessions
+        //        join i in _context.Institutions on a.InstitutionId equals i.Id
+        //        join ac in _context.AcademicClasses on a.Id equals ac.AcademicSessionId
+        //        where a.Id == id
+        //        select new AcademicSessionViewModel
+        //        {
+        //            Id = a.Id,
+        //            InstitutionId = a.InstitutionId,
+        //            Name = a.Name,
+        //            Description = a.Description,
+        //            StartDate = a.StartDate,
+        //            EndDate = a.EndDate,
+        //            InstitutionName = i.Name,
+        //        }).FirstOrDefaultAsync(cancellationToken);
+
+
         var result = (
                 from a in _context.AcademicSessions
                 join i in _context.Institutions on a.InstitutionId equals i.Id
@@ -80,7 +120,18 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
                     Description = a.Description,
                     StartDate = a.StartDate,
                     EndDate = a.EndDate,
-                    InstitutionName = i.Name
+                    InstitutionName = i.Name,
+                    AcademicClasses = (from c in _context.AcademicClasses
+                                       where c.AcademicSessionId == id
+                                       select new AcademicClassViewModel
+                                       {
+                                           Id = c.Id,
+                                           InstitutionId = c.InstitutionId,
+                                           AcademicSessionId = c.AcademicSessionId,
+                                           Name = c.Name,
+                                           TeacherId = c.TeacherId
+
+                                       })
                 }).FirstOrDefaultAsync(cancellationToken);
 
         return await result;

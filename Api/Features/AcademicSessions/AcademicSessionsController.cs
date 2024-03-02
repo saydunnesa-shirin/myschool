@@ -34,6 +34,23 @@ public class AcademicSessionsController : Controller
     }
 
     /// <remarks>
+    ///   Create AcademicSession with detail
+    /// </remarks>
+    [HttpPost("Create")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateAcademicSession.Result))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public async Task<ActionResult<CreateAcademicSessionWithDetails.Result>> CreateWithDetailAsync(
+      CreateAcademicSessionWithDetails.Command command,
+      CancellationToken cancellationToken)
+    {
+        return Ok(await _sender.Send(command, cancellationToken));
+    }
+
+    /// <remarks>
     ///   Update AcademicSession
     /// </remarks>
     [HttpPut]
