@@ -7,16 +7,7 @@ namespace Api.Features.AcademicSessions;
 
 public class CreateAcademicSessionWithDetails
 {
-    public record CommandDetail : IRequest<ResultDetail>
-    {
-        public int Id { get; set; }
-        public int InstitutionId { get; set; }
-        public int AcademicSessionId { get; set; }
-        public int? TeacherId { get; set; }
-        public string Name { get; set; }
-    }
-
-    public record Command : IRequest<Result>
+    public record Command : IRequest<AcademicSessionResult>
     {
         public int Id { get; set; }
         public int InstitutionId { get; set; }
@@ -24,18 +15,10 @@ public class CreateAcademicSessionWithDetails
         public string? Description { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public List<CommandDetail> AcademicClasses {  get; set; }
+        public List<AcademicClass> AcademicClasses { get; set; }
     }
 
-    public record Result : BaseResult
-    {
-    }
-
-    public record ResultDetail : AcademicClasses.BaseResult
-    {
-    }
-
-    public class Handler : IRequestHandler<Command, Result>
+    public class Handler : IRequestHandler<Command, AcademicSessionResult>
     {
         private readonly IMapper _mapper;
         private readonly IAcademicSessionsRepository _repository;
@@ -48,7 +31,7 @@ public class CreateAcademicSessionWithDetails
             _mapper = mapper;
         }
 
-        public async Task<Result> Handle(
+        public async Task<AcademicSessionResult> Handle(
           Command command,
           CancellationToken cancellationToken)
         {
@@ -62,24 +45,27 @@ public class CreateAcademicSessionWithDetails
                 EndDate = command.EndDate
             };
 
-            foreach (var item in command.AcademicClasses)
+            if(command.AcademicClasses != null)
             {
-                var @detail = new AcademicClass
+                foreach (var item in command.AcademicClasses!)
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    InstitutionId = item.InstitutionId,
-                    TeacherId = item.TeacherId
-                };
+                    var @detail = new AcademicClass
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        InstitutionId = item.InstitutionId,
+                        TeacherId = item.TeacherId
+                    };
 
-                AcademicClasses.Add(@detail);
+                    AcademicClasses.Add(@detail);
+                }
             }
 
             var saved = await _repository.CreateWithDetailsAsync(@new, AcademicClasses, cancellationToken);
 
             var AcademicSession = await _repository.GetAsync(saved.Id, cancellationToken);
 
-            var mappedAcademicSession = _mapper.Map<AcademicSessionViewModel, Result>(AcademicSession);
+            var mappedAcademicSession = _mapper.Map<AcademicSession, AcademicSessionResult>(AcademicSession);
 
             return mappedAcademicSession;
         }

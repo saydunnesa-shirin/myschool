@@ -17,44 +17,48 @@ public class MySchoolContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AcademicSessionTemplate>()
-            .HasOne(e => e.Institutions)
-            .WithMany()
+        modelBuilder.Entity<Country>()
+            .HasMany(x => x.Institutions)
+            .WithOne(y => y.Country)
+            .HasForeignKey(y => y.CountryId)
             .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<AcademicSession>()
-            .HasOne(e => e.Institutions)
-            .WithMany()
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<AcademicClass>()
-            .HasOne(e => e.Institutions)
-            .WithMany()
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<AcademicClass>()
-            .HasOne(e => e.AcademicSessions)
-            .WithMany()
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<AcademicClass>()
-            .HasOne(e => e.Teachers)
-            .WithMany()
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Employee>()
-            .HasOne(e => e.Countries)
-            .WithMany()
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Employee>()
-            .HasOne(e => e.Institutions)
-            .WithMany()
+        modelBuilder.Entity<Country>()
+            .HasMany(x => x.Employees)
+            .WithOne(y => y.Country)
+            .HasForeignKey(y => y.CountryId)
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Institution>()
-            .HasOne(e => e.Countries)
-            .WithMany()
+            .HasMany(x => x.AcademicSessionTemplates)
+            .WithOne(y => y.Institution)
+            .HasForeignKey(y => y.InstitutionId)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Institution>()
+            .HasMany(x => x.AcademicSessions)
+            .WithOne(y => y.Institution)
+            .HasForeignKey(y => y.InstitutionId)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Institution>()
+            .HasMany(x => x.AcademicClasses)
+            .WithOne(y => y.Institution)
+            .HasForeignKey(y => y.InstitutionId)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Institution>()
+            .HasMany(x => x.Employees)
+            .WithOne(y => y.Institution)
+            .HasForeignKey(y => y.InstitutionId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<AcademicSession>()
+            .HasMany(x => x.AcademicClasses)
+            .WithOne(y => y.AcademicSession)
+            .HasForeignKey(y => y.AcademicSessionId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<Employee>()
+            .HasMany(x => x.AcademicClasses)
+            .WithOne(y => y.Teacher)
+            .HasForeignKey(y => y.TeacherId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 

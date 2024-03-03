@@ -7,16 +7,14 @@ namespace Api.Domain.AcademicSessions
     {
         public MappingProfiles()
         {
-            GetList();
+            CommonMapping();
         }
 
-        private void GetList()
+        private void CommonMapping()
         {
-            CreateMap<AcademicSessionViewModel, GetAcademicSession.Result>();
-            CreateMap<AcademicSessionViewModel, GetAcademicSessions.Result>();
-
-            CreateMap<AcademicSessionViewModel, CreateAcademicSession.Result>();
-            CreateMap<AcademicSessionViewModel, UpdateAcademicSession.Result>();
+            CreateMap<AcademicSession, AcademicSessionResult>(MemberList.None)
+            .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name))
+            .ForMember(dest => dest.InstitutionName, opt => opt.MapFrom((src, dest) => src.Institution.Name));
         }
     }
 }

@@ -2,6 +2,7 @@ using Api.Data.Entities;
 using Api.Domain.AcademicClasses;
 using Api.Domain.AcademicSessions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Api.Features.AcademicSessions;
 
@@ -11,10 +12,10 @@ public interface IAcademicSessionsRepository
     Task<AcademicSession> CreateWithDetailsAsync(AcademicSession @new, IEnumerable<AcademicClass> academicClasses, CancellationToken cancellationToken);
     Task<AcademicSession> UpdateAsync(AcademicSession institution, CancellationToken cancellationToken);
 
-    Task<IEnumerable<AcademicSessionViewModel>> GetAllAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<AcademicSessionViewModel>> GetListByQueryAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<AcademicSessionViewModel>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken);
-    Task<AcademicSessionViewModel> GetAsync(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicSession>> GetAllAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicSession>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicSession>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken);
+    Task<AcademicSession> GetAsync(int id, CancellationToken cancellationToken);
 
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
 }
@@ -57,7 +58,7 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
 
             foreach (var academicClass in academicClasses)
             {
-                academicClass.AcademicSessions = @new;
+                academicClass.AcademicSession = @new;
                 _ = _context.AcademicClasses.Add(academicClass);
             }
             _ = await _context.SaveChangesAsync(cancellationToken);
@@ -70,115 +71,47 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
         return @new;
     }
 
-    public async Task<IEnumerable<AcademicSessionViewModel>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<AcademicSession>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var result = (
-                from a in _context.AcademicSessions
-                join i in _context.Institutions on a.InstitutionId equals i.Id
-                select new AcademicSessionViewModel
-                { 
-                    Id = a.Id, 
-                    InstitutionId = a.InstitutionId,
-                    Name = a.Name,
-                    Description = a.Description,
-                    StartDate = a.StartDate,
-                    EndDate = a.EndDate,
-                    InstitutionName = i.Name 
-                }).ToListAsync(cancellationToken);
+        var result = await _context.AcademicSessions
+            .Include(x => x.AcademicClasses)
+            .Include(x => x.Institution)
+            .ToListAsync(cancellationToken);
 
-        return await result;
+        return result;
     }
 
-    public async Task<AcademicSessionViewModel> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<AcademicSession> GetAsync(int id, CancellationToken cancellationToken)
     {
-        //var result = (
-        //        from a in _context.AcademicSessions
-        //        join i in _context.Institutions on a.InstitutionId equals i.Id
-        //        join ac in _context.AcademicClasses on a.Id equals ac.AcademicSessionId
-        //        where a.Id == id
-        //        select new AcademicSessionViewModel
-        //        {
-        //            Id = a.Id,
-        //            InstitutionId = a.InstitutionId,
-        //            Name = a.Name,
-        //            Description = a.Description,
-        //            StartDate = a.StartDate,
-        //            EndDate = a.EndDate,
-        //            InstitutionName = i.Name,
-        //        }).FirstOrDefaultAsync(cancellationToken);
+        var result = await _context.AcademicSessions
+            .Where(x => x.Id == id)
+            .Include(x => x.AcademicClasses)
+            .Include (x => x.Institution)
+            .FirstOrDefaultAsync(cancellationToken);
 
+        return result;
 
-        var result = (
-                from a in _context.AcademicSessions
-                join i in _context.Institutions on a.InstitutionId equals i.Id
-                where a.Id == id
-                select new AcademicSessionViewModel
-                {
-                    Id = a.Id,
-                    InstitutionId = a.InstitutionId,
-                    Name = a.Name,
-                    Description = a.Description,
-                    StartDate = a.StartDate,
-                    EndDate = a.EndDate,
-                    InstitutionName = i.Name,
-                    AcademicClasses = (from c in _context.AcademicClasses
-                                       where c.AcademicSessionId == id
-                                       select new AcademicClassViewModel
-                                       {
-                                           Id = c.Id,
-                                           InstitutionId = c.InstitutionId,
-                                           AcademicSessionId = c.AcademicSessionId,
-                                           Name = c.Name,
-                                           TeacherId = c.TeacherId
-
-                                       })
-                }).FirstOrDefaultAsync(cancellationToken);
-
-        return await result;
     }
 
-    public async Task<IEnumerable<AcademicSessionViewModel>> GetListByQueryAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<AcademicSession>> GetListByQueryAsync(CancellationToken cancellationToken)
     {
-        var result = (
-                from a in _context.AcademicSessions
-                join i in _context.Institutions on a.InstitutionId equals i.Id
-                orderby a.StartDate descending
+        var result = await _context.AcademicSessions
+            .Include(x => x.AcademicClasses)
+            .Include(x => x.Institution)
+            .ToListAsync(cancellationToken);
 
-                select new AcademicSessionViewModel
-                {
-                    Id = a.Id,
-                    InstitutionId = a.InstitutionId,
-                    Name = a.Name,
-                    Description = a.Description,
-                    StartDate = a.StartDate,
-                    EndDate = a.EndDate,
-                    InstitutionName = i.Name
-                }
-                ).ToListAsync(cancellationToken);
-
-        return await result;
+        return result;
     }
 
-    public async Task<IEnumerable<AcademicSessionViewModel>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<AcademicSession>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken)
     {
-        var result = (
-                from a in _context.AcademicSessions
-                join i in _context.Institutions on a.InstitutionId equals i.Id
-                where a.InstitutionId == institutionId
-                orderby a.StartDate descending
-                select new AcademicSessionViewModel
-                {
-                    Id = a.Id,
-                    InstitutionId = a.InstitutionId,
-                    Name = a.Name,
-                    Description = a.Description,
-                    StartDate = a.StartDate,
-                    EndDate = a.EndDate,
-                    InstitutionName = i.Name
-                }
-                ).ToListAsync(cancellationToken);
+        var result = await _context.AcademicSessions
+            .Where(x=>x.InstitutionId == institutionId)
+            .Include(x => x.AcademicClasses)
+            .Include(x => x.Institution)
+            .ToListAsync(cancellationToken);
 
-        return await result;
+        return result;
     }
 
     public async Task<AcademicSession> UpdateAsync(AcademicSession institution, CancellationToken cancellationToken)
@@ -203,7 +136,8 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
             AcademicSession deletableAcademicSession = await _context.AcademicSessions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
             if (deletableAcademicSession != null)
             {
-                _ = _context.AcademicSessions.Remove(deletableAcademicSession);
+                //_ = _context.AcademicSessions.Remove(deletableAcademicSession);
+                deletableAcademicSession.IsActive = false;
                 _ = await _context.SaveChangesAsync(cancellationToken);
                 return id;
             }

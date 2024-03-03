@@ -1,8 +1,7 @@
 ﻿using Api.Data.Entities;
-using Api.Domain.Institutions;
 using Api.Domain.AcademicSessions;
 using Api.Domain.Employees;
-using System.ComponentModel.DataAnnotations.Schema;
+using Api.Domain.Institutions;
 
 namespace Api.Domain.AcademicClasses
 {
@@ -13,11 +12,11 @@ namespace Api.Domain.AcademicClasses
         public int? TeacherId { get; set; }
         public string Name { get; set; }
 
-        public virtual Institution Institutions { get; set; }
+        public virtual Institution Institution { get; set; }
 
-        public virtual AcademicSession AcademicSessions { get; set; }
+        public virtual AcademicSession AcademicSession { get; set; }
 
-        [ForeignKey("TeacherId")]
-        public virtual Employee Teachers { get; set; }
+        //[ForeignKey("TeacherId")]
+        public virtual Employee Teacher { get; set; }
     }
 }

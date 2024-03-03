@@ -20,13 +20,13 @@ public class AcademicSessionsController : Controller
     ///   Create AcademicSession
     /// </remarks>
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateAcademicSession.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<CreateAcademicSession.Result>> CreateAsync(
+    public async Task<ActionResult<AcademicSessionResult>> CreateAsync(
       CreateAcademicSession.Command command,
       CancellationToken cancellationToken)
     {
@@ -37,13 +37,13 @@ public class AcademicSessionsController : Controller
     ///   Create AcademicSession with detail
     /// </remarks>
     [HttpPost("Create")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateAcademicSession.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<CreateAcademicSessionWithDetails.Result>> CreateWithDetailAsync(
+    public async Task<ActionResult<AcademicSessionResult>> CreateWithDetailAsync(
       CreateAcademicSessionWithDetails.Command command,
       CancellationToken cancellationToken)
     {
@@ -54,13 +54,13 @@ public class AcademicSessionsController : Controller
     ///   Update AcademicSession
     /// </remarks>
     [HttpPut]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UpdateAcademicSession.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<UpdateAcademicSession.Result>> UpdateAsync(
+    public async Task<ActionResult<AcademicSessionResult>> UpdateAsync(
       UpdateAcademicSession.Command command,
       CancellationToken cancellationToken)
     {
@@ -71,13 +71,13 @@ public class AcademicSessionsController : Controller
     ///   Delete AcademicSession
     /// </remarks>
     [HttpDelete]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetAcademicSession.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<DeleteAcademicSession>> DeleteAsync(
+    public async Task<ActionResult<AcademicSessionResult>> DeleteAsync(
       DeleteAcademicSession.Command command,
       CancellationToken cancellationToken)
     {
@@ -88,13 +88,13 @@ public class AcademicSessionsController : Controller
     ///   Get list of AcademicSessions based on query filters
     /// </remarks>
     [HttpPost("query")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<GetAcademicSessions.Result>))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<AcademicSessionResult>))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<List<GetAcademicSessions.Result>>> GetListByQueryAsync(
+    public async Task<ActionResult<List<AcademicSessionResult>>> GetListByQueryAsync(
       GetAcademicSessions.Query query,
       CancellationToken cancellationToken)
     {
@@ -105,13 +105,13 @@ public class AcademicSessionsController : Controller
     ///   Get single AcademicSession
     /// </remarks>
     [HttpGet("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetAcademicSession.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<GetAcademicSession.Result>> GetAsync(
+    public async Task<ActionResult<AcademicSessionResult>> GetAsync(
       string id,
       CancellationToken cancellationToken)
     {
