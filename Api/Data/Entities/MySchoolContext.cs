@@ -17,6 +17,12 @@ public class MySchoolContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AcademicSession>()
+            .HasMany(x => x.AcademicClasses)
+            .WithOne(y => y.AcademicSession)
+            .HasForeignKey(y => y.AcademicSessionId)
+            .OnDelete(DeleteBehavior.NoAction);
+
         modelBuilder.Entity<Country>()
             .HasMany(x => x.Institutions)
             .WithOne(y => y.Country)
@@ -27,6 +33,12 @@ public class MySchoolContext : DbContext
             .WithOne(y => y.Country)
             .HasForeignKey(y => y.CountryId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<Employee>()
+           .HasMany(x => x.AcademicClasses)
+           .WithOne(y => y.Teacher)
+           .HasForeignKey(y => y.TeacherId)
+           .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Institution>()
             .HasMany(x => x.AcademicSessionTemplates)
@@ -47,18 +59,6 @@ public class MySchoolContext : DbContext
             .HasMany(x => x.Employees)
             .WithOne(y => y.Institution)
             .HasForeignKey(y => y.InstitutionId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<AcademicSession>()
-            .HasMany(x => x.AcademicClasses)
-            .WithOne(y => y.AcademicSession)
-            .HasForeignKey(y => y.AcademicSessionId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Employee>()
-            .HasMany(x => x.AcademicClasses)
-            .WithOne(y => y.Teacher)
-            .HasForeignKey(y => y.TeacherId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 
