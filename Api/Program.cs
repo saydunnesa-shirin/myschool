@@ -39,11 +39,9 @@ else
 {
     connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
 }
-builder.Services.AddDbContext<MySchoolContext>(opt =>
-    opt.UseSqlServer("Data Source=myschoolsrv001.database.windows.net;Initial Catalog=myschoolDb001;Persist Security Info=False;User ID=myschoolsa;Password=super_001;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
 
-//builder.Services.AddDbContext<MySchoolContext>(opt =>
-//    opt.UseSqlServer("Data Source=SHIRIN;Initial Catalog=myschoolDb001;Persist Security Info=False;User ID=sa;Password=Sql1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;"));
+builder.Services.AddDbContext<MySchoolContext>(opt =>
+    opt.UseSqlServer("connectionstring"));
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<GetEmployee>();

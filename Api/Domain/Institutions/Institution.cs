@@ -1,5 +1,9 @@
 ﻿using Api.Data.Entities;
+using Api.Domain.AcademicClasses;
+using Api.Domain.AcademicSessions;
+using Api.Domain.AcademicSessionTemplates;
 using Api.Domain.Countries;
+using Api.Domain.Employees;
 
 namespace Api.Domain.Institutions
 {
@@ -9,6 +13,10 @@ namespace Api.Domain.Institutions
         public int CountryId { get; set; }
         public string Address { get; set; }
 
-        public virtual Country Countries { get; set; }
+        public virtual Country Country { get; set; }
+        public virtual ICollection<AcademicSessionTemplate> AcademicSessionTemplates { get; set; }
+        public virtual ICollection<AcademicSession> AcademicSessions { get; set; }
+        public virtual ICollection<AcademicClass> AcademicClasses { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
     }
 }

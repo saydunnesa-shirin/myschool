@@ -6,7 +6,7 @@ namespace Api.Features.AcademicSessions;
 
 public class UpdateAcademicSession
 {
-    public record Command : IRequest<Result>
+    public record Command : IRequest<AcademicSessionResult>
     {
         public int Id { get; set; }
         public int InstitutionId { get; set; }
@@ -16,11 +16,7 @@ public class UpdateAcademicSession
         public DateTime EndDate { get; set; }
     }
 
-    public record Result : BaseResult
-    {
-    }
-
-    public class Handler : IRequestHandler<Command, Result>
+    public class Handler : IRequestHandler<Command, AcademicSessionResult>
     {
         private readonly IMapper _mapper;
         private readonly IAcademicSessionsRepository _repository;
@@ -33,7 +29,7 @@ public class UpdateAcademicSession
             _mapper = mapper;
         }
 
-        public async Task<Result> Handle(
+        public async Task<AcademicSessionResult> Handle(
           Command command,
           CancellationToken cancellationToken)
         {
@@ -48,9 +44,9 @@ public class UpdateAcademicSession
             };
             var updated = await _repository.UpdateAsync(@update, cancellationToken);
 
-            var AcademicSession = await _repository.GetAsync(updated.Id, cancellationToken);
+            var academicSession = await _repository.GetAsync(updated.Id, cancellationToken);
 
-            var mappedAcademicSession = _mapper.Map<AcademicSessionViewModel, Result>(AcademicSession);
+            var mappedAcademicSession = _mapper.Map<AcademicSession, AcademicSessionResult>(academicSession);
 
             return mappedAcademicSession;
         }

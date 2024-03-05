@@ -12,10 +12,9 @@ namespace Api.Domain.AcademicClasses
 
         private void GetList()
         {
-            CreateMap<AcademicClassViewModel, GetAcademicClass.Result>();
-            CreateMap<AcademicClassViewModel, GetAcademicClasses.Result>();
-            CreateMap<AcademicClassViewModel, CreateAcademicClass.Result>();
-            CreateMap<AcademicClassViewModel, UpdateAcademicClass.Result>();
+            CreateMap<AcademicClass, AcademicClassResult>(MemberList.None)
+            .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name))
+            .ForMember(dest => dest.TeacherId, opt => opt.MapFrom((src, dest) => src.InstitutionId));
         }
     }
 }

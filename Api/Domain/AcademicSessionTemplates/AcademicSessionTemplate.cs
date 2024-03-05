@@ -8,6 +8,6 @@ namespace Api.Domain.AcademicSessionTemplates
         public string TemplateName { get; set; }
         public int InstitutionId { get; set; }
 
-        public virtual Institution Institutions { get; set; }
+        public virtual Institution Institution { get; set; }
     }
 }

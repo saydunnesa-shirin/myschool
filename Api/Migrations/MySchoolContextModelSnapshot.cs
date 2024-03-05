@@ -22,6 +22,53 @@ namespace Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Api.Domain.AcademicClasses.AcademicClass", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AcademicSessionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InstitutionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AcademicSessionId");
+
+                    b.HasIndex("InstitutionId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("AcademicClasses");
+                });
+
             modelBuilder.Entity("Api.Domain.AcademicSessionTemplates.AcademicSessionTemplate", b =>
                 {
                     b.Property<int>("Id")
@@ -103,53 +150,6 @@ namespace Api.Migrations
                     b.HasIndex("InstitutionId");
 
                     b.ToTable("AcademicSessions");
-                });
-
-            modelBuilder.Entity("Api.Domain.AdademicClasses.AcademicClass", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AcademicSessionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("InstitutionId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AcademicSessionId");
-
-                    b.HasIndex("InstitutionId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("AcademicClasses");
                 });
 
             modelBuilder.Entity("Api.Domain.Countries.Country", b =>
@@ -323,81 +323,109 @@ namespace Api.Migrations
                     b.ToTable("Institutions");
                 });
 
-            modelBuilder.Entity("Api.Domain.AcademicSessionTemplates.AcademicSessionTemplate", b =>
+            modelBuilder.Entity("Api.Domain.AcademicClasses.AcademicClass", b =>
                 {
-                    b.HasOne("Api.Domain.Institutions.Institution", "Institutions")
-                        .WithMany()
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Institutions");
-                });
-
-            modelBuilder.Entity("Api.Domain.AcademicSessions.AcademicSession", b =>
-                {
-                    b.HasOne("Api.Domain.Institutions.Institution", "Institutions")
-                        .WithMany()
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Institutions");
-                });
-
-            modelBuilder.Entity("Api.Domain.AdademicClasses.AcademicClass", b =>
-                {
-                    b.HasOne("Api.Domain.AcademicSessions.AcademicSession", "AcademicSessions")
-                        .WithMany()
+                    b.HasOne("Api.Domain.AcademicSessions.AcademicSession", "AcademicSession")
+                        .WithMany("AcademicClasses")
                         .HasForeignKey("AcademicSessionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Api.Domain.Institutions.Institution", "Institutions")
-                        .WithMany()
+                    b.HasOne("Api.Domain.Institutions.Institution", "Institution")
+                        .WithMany("AcademicClasses")
                         .HasForeignKey("InstitutionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Api.Domain.Employees.Employee", "Teachers")
-                        .WithMany()
+                    b.HasOne("Api.Domain.Employees.Employee", "Teacher")
+                        .WithMany("AcademicClasses")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("AcademicSessions");
+                    b.Navigation("AcademicSession");
 
-                    b.Navigation("Institutions");
+                    b.Navigation("Institution");
 
-                    b.Navigation("Teachers");
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Api.Domain.AcademicSessionTemplates.AcademicSessionTemplate", b =>
+                {
+                    b.HasOne("Api.Domain.Institutions.Institution", "Institution")
+                        .WithMany("AcademicSessionTemplates")
+                        .HasForeignKey("InstitutionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Institution");
+                });
+
+            modelBuilder.Entity("Api.Domain.AcademicSessions.AcademicSession", b =>
+                {
+                    b.HasOne("Api.Domain.Institutions.Institution", "Institution")
+                        .WithMany("AcademicSessions")
+                        .HasForeignKey("InstitutionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Institution");
                 });
 
             modelBuilder.Entity("Api.Domain.Employees.Employee", b =>
                 {
-                    b.HasOne("Api.Domain.Countries.Country", "Countries")
-                        .WithMany()
+                    b.HasOne("Api.Domain.Countries.Country", "Country")
+                        .WithMany("Employees")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Api.Domain.Institutions.Institution", "Institutions")
-                        .WithMany()
+                    b.HasOne("Api.Domain.Institutions.Institution", "Institution")
+                        .WithMany("Employees")
                         .HasForeignKey("InstitutionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Countries");
+                    b.Navigation("Country");
 
-                    b.Navigation("Institutions");
+                    b.Navigation("Institution");
                 });
 
             modelBuilder.Entity("Api.Domain.Institutions.Institution", b =>
                 {
-                    b.HasOne("Api.Domain.Countries.Country", "Countries")
-                        .WithMany()
+                    b.HasOne("Api.Domain.Countries.Country", "Country")
+                        .WithMany("Institutions")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Countries");
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Api.Domain.AcademicSessions.AcademicSession", b =>
+                {
+                    b.Navigation("AcademicClasses");
+                });
+
+            modelBuilder.Entity("Api.Domain.Countries.Country", b =>
+                {
+                    b.Navigation("Employees");
+
+                    b.Navigation("Institutions");
+                });
+
+            modelBuilder.Entity("Api.Domain.Employees.Employee", b =>
+                {
+                    b.Navigation("AcademicClasses");
+                });
+
+            modelBuilder.Entity("Api.Domain.Institutions.Institution", b =>
+                {
+                    b.Navigation("AcademicClasses");
+
+                    b.Navigation("AcademicSessionTemplates");
+
+                    b.Navigation("AcademicSessions");
+
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

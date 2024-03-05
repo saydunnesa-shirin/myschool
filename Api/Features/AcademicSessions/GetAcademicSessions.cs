@@ -6,18 +6,14 @@ namespace Api.Features.AcademicSessions;
 
 public class GetAcademicSessions
 {
-    public record Query : IRequest<List<Result>>
+    public record Query : IRequest<List<AcademicSessionResult>>
     {
         public int? Id { get; set; }
         public int? InstitutionId { get; set; }
         public string Term { get; set; } = string.Empty;
     }
 
-    public record Result : BaseResult
-    {
-    }
-
-    public class Handler : IRequestHandler<Query, List<Result>>
+    public class Handler : IRequestHandler<Query, List<AcademicSessionResult>>
     {
         private readonly IMapper _mapper;
         private readonly IAcademicSessionsRepository _repository;
@@ -30,21 +26,21 @@ public class GetAcademicSessions
             _mapper = mapper;
         }
 
-        public async Task<List<Result>> Handle(
+        public async Task<List<AcademicSessionResult>> Handle(
           Query query,
           CancellationToken cancellationToken)
         {
-            IEnumerable<AcademicSessionViewModel> list;
-            List<Result> mappedList = new();
+            IEnumerable<AcademicSession> academicSessions;
+            List<AcademicSessionResult> mappedList = new();
 
             if (query.InstitutionId != null)
-                list = await _repository.GetListByInstitutionAsync((int)query.InstitutionId, cancellationToken);
+                academicSessions = await _repository.GetListByInstitutionAsync((int)query.InstitutionId, cancellationToken);
             else
-                list = await _repository.GetListByQueryAsync(cancellationToken);
+                academicSessions = await _repository.GetListByQueryAsync(cancellationToken);
 
-            foreach (var institution in list)
+            foreach (var academicSession in academicSessions)
             {
-                var mapped = _mapper.Map<AcademicSessionViewModel, Result>(institution);
+                var mapped = _mapper.Map<AcademicSession, AcademicSessionResult>(academicSession);
                 mappedList.Add(mapped);
             }
             return mappedList;

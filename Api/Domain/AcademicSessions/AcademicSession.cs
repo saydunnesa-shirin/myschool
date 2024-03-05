@@ -1,4 +1,5 @@
 ﻿using Api.Data.Entities;
+using Api.Domain.AcademicClasses;
 using Api.Domain.Institutions;
 
 namespace Api.Domain.AcademicSessions
@@ -11,6 +12,7 @@ namespace Api.Domain.AcademicSessions
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public virtual Institution Institutions { get; set; }
+        public virtual Institution Institution { get; set; }
+        public virtual ICollection<AcademicClass> AcademicClasses { get; set; }
     }
 }

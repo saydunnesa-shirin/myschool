@@ -9,9 +9,9 @@ public interface IAcademicClassesRepository
     Task<AcademicClass> CreateAsync(AcademicClass @new, CancellationToken cancellationToken);
     Task<AcademicClass> UpdateAsync(AcademicClass institution, CancellationToken cancellationToken);
 
-    Task<IEnumerable<AcademicClassViewModel>> GetAllAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<AcademicClassViewModel>> GetListByQueryAsync(CancellationToken cancellationToken);
-    Task<AcademicClassViewModel> GetAsync(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicClass>> GetAllAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicClass>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<AcademicClass> GetAsync(int id, CancellationToken cancellationToken);
 
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
 }
@@ -46,74 +46,39 @@ public class AcademicClassesRepository : IAcademicClassesRepository
         return @new;
     }
 
-    public async Task<IEnumerable<AcademicClassViewModel>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<AcademicClass>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var result = (
-                from ac in _context.AcademicClasses
-                join i in _context.Institutions on ac.InstitutionId equals i.Id
-                join s in _context.AcademicSessions on ac.AcademicSessionId equals s.Id
-                join e in _context.Employees on ac.TeacherId equals e.Id
+        var result = await _context.AcademicClasses
+            .Include(x => x.Institution)
+            .Include(x => x.AcademicSession)
+            .Include(x => x.Teacher)
+            .ToListAsync();
 
-                select new AcademicClassViewModel
-                { 
-                    Id = ac.Id, 
-                    InstitutionId = ac.InstitutionId,
-                    AcademicSessionId = ac.AcademicSessionId,
-                    TeacherId = ac.TeacherId,
-                    Name = ac.Name,
-                    InstitutionName = i.Name,
-                    AcademicSessionName = s.Name,
-                    TeacherName = e.FirstName
-                }).ToListAsync(cancellationToken);
-
-        return await result;
+        return result;
     }
 
-    public async Task<AcademicClassViewModel> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<AcademicClass> GetAsync(int id, CancellationToken cancellationToken)
     {
-        var result = (
-                from ac in _context.AcademicClasses
-                join i in _context.Institutions on ac.InstitutionId equals i.Id
-                join s in _context.AcademicSessions on ac.AcademicSessionId equals s.Id
-                join e in _context.Employees on ac.TeacherId equals e.Id
+        var result = await _context.AcademicClasses
+            .Where(x => x.Id == id)
+            .Include(x => x.Institution)
+            .Include(x => x.AcademicSession)
+            .Include(x => x.Teacher)
+            .FirstOrDefaultAsync();
 
-                where ac.Id == id
-                select new AcademicClassViewModel
-                {
-                    Id = ac.Id,
-                    InstitutionId = ac.InstitutionId,
-                    AcademicSessionId = ac.AcademicSessionId,
-                    TeacherId = ac.TeacherId,
-                    Name = ac.Name,
-                    InstitutionName = i.Name,
-                    AcademicSessionName = s.Name,
-                    TeacherName = e.FirstName
-                }).FirstOrDefaultAsync(cancellationToken);
-
-        return await result;
+        return result;
     }
 
-    public async Task<IEnumerable<AcademicClassViewModel>> GetListByQueryAsync( CancellationToken cancellationToken)
+    public async Task<IEnumerable<AcademicClass>> GetListByQueryAsync( CancellationToken cancellationToken)
     {
-        var result = (
-                from ac in _context.AcademicClasses
-                join i in _context.Institutions on ac.InstitutionId equals i.Id
-                join s in _context.AcademicSessions on ac.AcademicSessionId equals s.Id
-                join e in _context.Employees on ac.TeacherId equals e.Id
-                select new AcademicClassViewModel
-                {
-                    Id = ac.Id,
-                    InstitutionId = ac.InstitutionId,
-                    AcademicSessionId = ac.AcademicSessionId,
+        var result = await _context.AcademicClasses
+            //.Where(x => x.Id == id)
+            .Include(x => x.Institution)
+            .Include(x => x.AcademicSession)
+            .Include(x => x.Teacher)
+            .ToListAsync();
 
-                    TeacherId = ac.TeacherId,
-                    Name = ac.Name,
-                    InstitutionName = i.Name,
-                    AcademicSessionName = s.Name,
-                    TeacherName = e.FirstName
-                }).ToListAsync(cancellationToken);
-
-        return await result;
+        return result;
     }
 
     public async Task<AcademicClass> UpdateAsync(AcademicClass institution, CancellationToken cancellationToken)

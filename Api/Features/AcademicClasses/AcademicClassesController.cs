@@ -20,13 +20,13 @@ public class AcademicClassesController : Controller
     ///   Create AcademicClass
     /// </remarks>
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateAcademicClass.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicClassResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<CreateAcademicClass.Result>> CreateAsync(
+    public async Task<ActionResult<AcademicClassResult>> CreateAsync(
       CreateAcademicClass.Command command,
       CancellationToken cancellationToken)
     {
@@ -37,13 +37,13 @@ public class AcademicClassesController : Controller
     ///   Update AcademicClass
     /// </remarks>
     [HttpPut]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UpdateAcademicClass.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicClassResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<UpdateAcademicClass.Result>> UpdateAsync(
+    public async Task<ActionResult<AcademicClassResult>> UpdateAsync(
       UpdateAcademicClass.Command command,
       CancellationToken cancellationToken)
     {
@@ -54,13 +54,13 @@ public class AcademicClassesController : Controller
     ///   Delete AcademicClass
     /// </remarks>
     [HttpDelete]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetAcademicClass.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicClassResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<DeleteAcademicClass>> DeleteAsync(
+    public async Task<ActionResult<AcademicClassResult>> DeleteAsync(
       DeleteAcademicClass.Command command,
       CancellationToken cancellationToken)
     {
@@ -71,13 +71,13 @@ public class AcademicClassesController : Controller
     ///   Get list of AcademicClasses based on query filters
     /// </remarks>
     [HttpPost("query")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<GetAcademicClasses.Result>))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<AcademicClassResult>))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<List<GetAcademicClasses.Result>>> GetListByQueryAsync(
+    public async Task<ActionResult<List<AcademicClassResult>>> GetListByQueryAsync(
       GetAcademicClasses.Query query,
       CancellationToken cancellationToken)
     {
@@ -88,13 +88,13 @@ public class AcademicClassesController : Controller
     ///   Get single AcademicClass
     /// </remarks>
     [HttpGet("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetAcademicClass.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicClassResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<GetAcademicClass.Result>> GetAsync(
+    public async Task<ActionResult<AcademicClassResult>> GetAsync(
       string id,
       CancellationToken cancellationToken)
     {

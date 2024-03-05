@@ -1,4 +1,5 @@
 using Api.Data.Entities;
+using Api.Domain.AcademicClasses;
 using Api.Domain.Countries;
 using Api.Domain.Institutions;
 
@@ -32,7 +33,9 @@ public class Employee : BaseEntity
     public string? MotherName { get; set; }
     public string? FatherName { get; set; }
 
-    public virtual Country Countries { get; set; }
+    public virtual Country Country { get; set; }
 
-    public virtual Institution Institutions { get; set; }
+    public virtual Institution Institution { get; set; }
+
+    public virtual ICollection<AcademicClass> AcademicClasses { get; set; }
 }
