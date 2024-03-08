@@ -13,11 +13,8 @@ namespace Api.Domain.SessionTemplate
 
         private void GetList()
         {
-            CreateMap<AcademicSessionTemplateViewModel, GetAcademicSessionTemplate.Result>();
-            CreateMap<AcademicSessionTemplateViewModel, GetAcademicSessionTemplates.Result>();
-
-            CreateMap<AcademicSessionTemplateViewModel, CreateAcademicSessionTemplate.Result>();
-            CreateMap<AcademicSessionTemplateViewModel, UpdateAcademicSessionTemplate.Result>();
+            CreateMap<AcademicSessionTemplate, AcademicSessionTemplateResult>(MemberList.None)
+           .ForMember(dest => dest.InstitutionName, opt => opt.MapFrom((src, dest) => src.Institution.Name));
         }
     }
 }

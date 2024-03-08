@@ -22,7 +22,7 @@ public class EmployeesControllerTests
   {
     // Arrange
     _ = _senderMock.Setup(x => x.Send(It.IsAny<GetEmployee.Query>(), It.IsAny<CancellationToken>()))
-      .ReturnsAsync(() => new GetEmployee.Result
+      .ReturnsAsync(() => new EmployeeResult
       {
         Id = 1,
         FirstName = "Peter",
@@ -37,6 +37,6 @@ public class EmployeesControllerTests
     // Assert
     var result = actionResult.Result as OkObjectResult;
     result.Should().NotBeNull();
-    result?.Value.As<GetEmployee.Result>().Id.Should().Be(1);
+    result?.Value.As<EmployeeResult>().Id.Should().Be(1);
   }
 }

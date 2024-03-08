@@ -29,8 +29,6 @@ public class GetAcademicSession
           Query query,
           CancellationToken cancellationToken)
         {
-            AcademicSessionResult mappedList = new();
-
             var academicSession = await _repository.GetAsync(query.Id, cancellationToken);
             var mapped = _mapper.Map<AcademicSession, AcademicSessionResult>(academicSession);
 

@@ -6,17 +6,13 @@ namespace Api.Features.AcademicSessionTemplates;
 
 public class CreateAcademicSessionTemplate
 {
-    public record Command : IRequest<Result>
+    public record Command : IRequest<AcademicSessionTemplateResult>
     {
         public string TemplateName { get; set; } = string.Empty;
         public int InstitutionId { get; set; }
     }
 
-    public record Result : BaseResult
-    {
-    }
-
-    public class Handler : IRequestHandler<Command, Result>
+    public class Handler : IRequestHandler<Command, AcademicSessionTemplateResult>
     {
         private readonly IMapper _mapper;
         private readonly IAcademicSessionTemplatesRepository _repository;
@@ -29,7 +25,7 @@ public class CreateAcademicSessionTemplate
             _mapper = mapper;
         }
 
-        public async Task<Result> Handle(
+        public async Task<AcademicSessionTemplateResult> Handle(
           Command command,
           CancellationToken cancellationToken)
         {
@@ -42,7 +38,7 @@ public class CreateAcademicSessionTemplate
 
             var institution = await _repository.GetAsync(saved.Id, cancellationToken);
 
-            var mappedAcademicSessionTemplate = _mapper.Map<AcademicSessionTemplateViewModel, Result>(institution);
+            var mappedAcademicSessionTemplate = _mapper.Map<AcademicSessionTemplate, AcademicSessionTemplateResult>(institution);
 
             return mappedAcademicSessionTemplate;
         }

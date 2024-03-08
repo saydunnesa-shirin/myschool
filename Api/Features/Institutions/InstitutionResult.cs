@@ -1,6 +1,6 @@
 namespace Api.Features.Institutions;
 
-public record BaseResult
+public record InstitutionResult
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

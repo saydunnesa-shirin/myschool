@@ -1,6 +1,6 @@
 namespace Api.Features.AcademicSessionTemplates;
 
-public record BaseResult
+public record AcademicSessionTemplateResult
 {
     public int Id { get; set; }
     public string TemplateName { get; set; }

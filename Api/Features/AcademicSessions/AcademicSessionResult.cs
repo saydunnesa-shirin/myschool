@@ -1,4 +1,3 @@
-using Api.Domain.AcademicClasses;
 using Api.Features.AcademicClasses;
 
 namespace Api.Features.AcademicSessions;

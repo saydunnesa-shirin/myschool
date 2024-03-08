@@ -6,16 +6,12 @@ namespace Api.Features.Employees;
 
 public class GetEmployee
 {
-    public record Query : IRequest<Result>
+    public record Query : IRequest<EmployeeResult>
     {
         public int Id { get; set; }
     }
 
-    public record Result : BaseResult
-    {
-    }
-
-    public class Handler : IRequestHandler<Query, Result>
+    public class Handler : IRequestHandler<Query, EmployeeResult>
     {
         private readonly IMapper _mapper;
         private readonly IEmployeesRepository _repository;
@@ -28,12 +24,12 @@ public class GetEmployee
             _mapper = mapper;
         }
 
-        public async Task<Result> Handle(
+        public async Task<EmployeeResult> Handle(
           Query query,
           CancellationToken cancellationToken)
         {
             var employee = await _repository.GetByIdyAsync(query.Id, cancellationToken);
-            var mappedEmployee = _mapper.Map<EmployeeViewModel, Result>(employee);
+            var mappedEmployee = _mapper.Map<Employee, EmployeeResult>(employee);
 
             return mappedEmployee;
         }

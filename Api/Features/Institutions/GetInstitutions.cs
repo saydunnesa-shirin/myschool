@@ -6,17 +6,13 @@ namespace Api.Features.Institutions;
 
 public class GetInstitutions
 {
-    public record Query : IRequest<List<Result>>
+    public record Query : IRequest<List<InstitutionResult>>
     {
         public int? Id { get; set; }
         public string Term { get; set; } = string.Empty;
     }
 
-    public record Result : BaseResult
-    {
-    }
-
-    public class Handler : IRequestHandler<Query, List<Result>>
+    public class Handler : IRequestHandler<Query, List<InstitutionResult>>
     {
         private readonly IMapper _mapper;
         private readonly IInstitutionsRepository _repository;
@@ -29,17 +25,16 @@ public class GetInstitutions
             _mapper = mapper;
         }
 
-        public async Task<List<Result>> Handle(
+        public async Task<List<InstitutionResult>> Handle(
           Query query,
           CancellationToken cancellationToken)
         {
-            IEnumerable<InstitutionViewModel> list;
-            List<Result> mappedList = new();
+            List<InstitutionResult> mappedList = new();
             
-            list = await _repository.GetListByQueryAsync(cancellationToken);
+            var list = await _repository.GetAllAsync(cancellationToken);
             foreach (var institution in list)
             {
-                var mapped = _mapper.Map<InstitutionViewModel, Result>(institution);
+                var mapped = _mapper.Map<Institution, InstitutionResult>(institution);
                 mappedList.Add(mapped);
             }
             return mappedList;

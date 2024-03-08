@@ -9,5 +9,4 @@
         public int? DesignationId { get; set; }
         public int? InstitutionId { get; set; }
     }
-
 }
