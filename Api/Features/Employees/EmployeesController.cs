@@ -22,13 +22,13 @@ public class EmployeesController : ControllerBase
     ///   Get single employee
     /// </remarks>
     [HttpGet("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetEmployee.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<GetEmployee.Result>> GetAsync(
+    public async Task<ActionResult<EmployeeResult>> GetAsync(
       string id,
       CancellationToken cancellationToken)
     {
@@ -40,13 +40,13 @@ public class EmployeesController : ControllerBase
     ///   Get list of employees based on query filters
     /// </remarks>
     [HttpPost("query")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<GetEmployees.Result>))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<EmployeeResult>))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<List<GetEmployees.Result>>> GetListByQueryAsync(
+    public async Task<ActionResult<List<EmployeeResult>>> GetListByQueryAsync(
       GetEmployees.Query query,
       CancellationToken cancellationToken)
     {
@@ -57,13 +57,13 @@ public class EmployeesController : ControllerBase
     ///   Create employee
     /// </remarks>
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateEmployee.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<CreateEmployee.Result>> CreateAsync(
+    public async Task<ActionResult<EmployeeResult>> CreateAsync(
       CreateEmployee.Command command,
       CancellationToken cancellationToken)
     {
@@ -74,13 +74,13 @@ public class EmployeesController : ControllerBase
     ///   Update employee
     /// </remarks>
     [HttpPut]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateEmployee.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<UpdateEmployee.Result>> UpdateAsync(
+    public async Task<ActionResult<EmployeeResult>> UpdateAsync(
       UpdateEmployee.Command command,
       CancellationToken cancellationToken)
     {
@@ -91,13 +91,13 @@ public class EmployeesController : ControllerBase
     ///   Delete employee
     /// </remarks>
     [HttpDelete]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetEmployee.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<DeleteEmployee>> DeleteAsync(
+    public async Task<ActionResult<EmployeeResult>> DeleteAsync(
       DeleteEmployee.Command command,
       CancellationToken cancellationToken)
     {

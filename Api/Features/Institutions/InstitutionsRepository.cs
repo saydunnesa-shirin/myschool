@@ -9,9 +9,8 @@ public interface IInstitutionsRepository
     Task<Institution> CreateAsync(Institution @new, CancellationToken cancellationToken);
     Task<Institution> UpdateAsync(Institution institution, CancellationToken cancellationToken);
 
-    Task<IEnumerable<InstitutionViewModel>> GetAllAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<InstitutionViewModel>> GetListByQueryAsync(CancellationToken cancellationToken);
-    Task<InstitutionViewModel> GetAsync(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<Institution>> GetAllAsync(CancellationToken cancellationToken);
+    Task<Institution> GetAsync(int id, CancellationToken cancellationToken);
 
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
 }
@@ -46,58 +45,23 @@ public class InstitutionsRepository : IInstitutionsRepository
         return @new;
     }
 
-    public async Task<IEnumerable<InstitutionViewModel>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Institution>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var result = (
-                from i in _context.Institutions
-                join c in _context.Countries on i.CountryId equals c.Id
-                select new InstitutionViewModel
-                { 
-                    Id = i.Id, 
-                    CountryId = i.CountryId,
-                    Name = i.Name,
-                    Address = i.Address,
-                    CountryName = c.Name }
-                ).ToListAsync(cancellationToken);
+        var result = await _context.Institutions
+            .Include(x => x.Country)
+            .ToListAsync(cancellationToken);
 
-        return await result;
+        return result;
     }
 
-    public async Task<InstitutionViewModel> GetAsync(int id, CancellationToken cancellationToken)
+    public async Task<Institution> GetAsync(int id, CancellationToken cancellationToken)
     {
-        var result = (
-                from i in _context.Institutions
-                join c in _context.Countries on i.CountryId equals c.Id
-                where i.Id == id
-                select new InstitutionViewModel
-                {
-                    Id = i.Id,
-                    CountryId = i.CountryId,
-                    Name = i.Name,
-                    Address = i.Address,
-                    CountryName = c.Name
-                }
-                ).FirstOrDefaultAsync(cancellationToken);
+        var result = await _context.Institutions
+            .Where(x => x.Id == id)
+            .Include(x => x.Country)
+            .FirstOrDefaultAsync(cancellationToken);
 
-        return await result;
-    }
-
-    public async Task<IEnumerable<InstitutionViewModel>> GetListByQueryAsync(CancellationToken cancellationToken)
-    {
-        var result = (
-                from i in _context.Institutions
-                join c in _context.Countries on i.CountryId equals c.Id
-                select new InstitutionViewModel
-                {
-                    Id = i.Id,
-                    CountryId = i.CountryId,
-                    Name = i.Name,
-                    Address = i.Address,
-                    CountryName = c.Name
-                }
-                ).ToListAsync(cancellationToken);
-
-        return await result;
+        return result;
     }
 
     public async Task<Institution> UpdateAsync(Institution institution, CancellationToken cancellationToken)

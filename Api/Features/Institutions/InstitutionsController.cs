@@ -20,13 +20,13 @@ public class InstitutionsController : Controller
     ///   Create institution
     /// </remarks>
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CreateInstitution.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(InstitutionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<CreateInstitution.Result>> CreateAsync(
+    public async Task<ActionResult<InstitutionResult>> CreateAsync(
       CreateInstitution.Command command,
       CancellationToken cancellationToken)
     {
@@ -37,13 +37,13 @@ public class InstitutionsController : Controller
     ///   Update institution
     /// </remarks>
     [HttpPut]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(UpdateInstitution.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(InstitutionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<UpdateInstitution.Result>> UpdateAsync(
+    public async Task<ActionResult<InstitutionResult>> UpdateAsync(
       UpdateInstitution.Command command,
       CancellationToken cancellationToken)
     {
@@ -54,13 +54,13 @@ public class InstitutionsController : Controller
     ///   Delete institution
     /// </remarks>
     [HttpDelete]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetInstitution.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(InstitutionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<DeleteInstitution>> DeleteAsync(
+    public async Task<ActionResult<InstitutionResult>> DeleteAsync(
       DeleteInstitution.Command command,
       CancellationToken cancellationToken)
     {
@@ -71,13 +71,13 @@ public class InstitutionsController : Controller
     ///   Get list of institutions based on query filters
     /// </remarks>
     [HttpPost("query")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<GetInstitutions.Result>))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<InstitutionResult>))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<List<GetInstitutions.Result>>> GetListByQueryAsync(
+    public async Task<ActionResult<List<InstitutionResult>>> GetListByQueryAsync(
       GetInstitutions.Query query,
       CancellationToken cancellationToken)
     {
@@ -88,13 +88,13 @@ public class InstitutionsController : Controller
     ///   Get single institution
     /// </remarks>
     [HttpGet("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(GetInstitution.Result))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(InstitutionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<GetInstitution.Result>> GetAsync(
+    public async Task<ActionResult<InstitutionResult>> GetAsync(
       string id,
       CancellationToken cancellationToken)
     {

@@ -6,17 +6,13 @@ namespace Api.Features.Employees;
 
 public class GetEmployees
 {
-    public record Query : IRequest<List<Result>>
+    public record Query : IRequest<List<EmployeeResult>>
     {
         public int? DesignationId { get; set; }
         public int? InstitutionId { get; set; }
     }
 
-    public record Result : BaseResult
-    {
-    }
-
-    public class Handler : IRequestHandler<Query, List<Result>>
+    public class Handler : IRequestHandler<Query, List<EmployeeResult>>
     {
         private readonly IMapper _mapper;
         private readonly IEmployeesRepository _repository;
@@ -29,12 +25,12 @@ public class GetEmployees
             _mapper = mapper;
         }
 
-        public async Task<List<Result>> Handle(
+        public async Task<List<EmployeeResult>> Handle(
           Query query,
           CancellationToken cancellationToken)
         {
-            List<Result> mappedList = new();
-            IEnumerable<EmployeeViewModel> list;
+            List<EmployeeResult> mappedList = new();
+            IEnumerable<Employee> list;
 
             var employeeQuery = new EmployeeQuery
             {
@@ -46,7 +42,7 @@ public class GetEmployees
 
             foreach (var employee in list)
             {
-                var mapped = _mapper.Map<EmployeeViewModel, Result>(employee);
+                var mapped = _mapper.Map<Employee, EmployeeResult>(employee);
                 mappedList.Add(mapped);
             }
 

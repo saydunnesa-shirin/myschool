@@ -1,6 +1,6 @@
 namespace Api.Features.Employees;
 
-public record BaseResult
+public record EmployeeResult
 {
     public int Id { get; set; }
     public string EmployeeId { get; set; } = string.Empty;
@@ -28,4 +28,5 @@ public record BaseResult
     public string MotherName { get; set; } = string.Empty;
     public string FatherName { get; set; } = string.Empty;
     public string CountryName { get; set; }
+    public string InstitutionName { get; set; }
 }

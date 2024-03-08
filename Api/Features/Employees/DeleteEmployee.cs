@@ -27,7 +27,6 @@ public class DeleteEmployee
           CancellationToken cancellationToken)
         {
             var deleted = await _repository.DeleteAsync(command.Id, cancellationToken);
-
             return deleted;
         }
     }

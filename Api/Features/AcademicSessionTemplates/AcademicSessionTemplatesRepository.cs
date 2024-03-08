@@ -8,14 +8,12 @@ public interface IAcademicSessionTemplatesRepository
 {
     Task<AcademicSessionTemplate> CreateAsync(AcademicSessionTemplate @new, CancellationToken cancellationToken);
     Task<AcademicSessionTemplate> UpdateAsync(AcademicSessionTemplate institution, CancellationToken cancellationToken);
-
-    Task<IEnumerable<AcademicSessionTemplateViewModel>> GetAllAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<AcademicSessionTemplateViewModel>> GetListByQueryAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<AcademicSessionTemplateViewModel>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken);
-
-    Task<AcademicSessionTemplateViewModel> GetAsync(int id, CancellationToken cancellationToken);
-
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
+
+    Task<IEnumerable<AcademicSessionTemplate>> GetAllAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicSessionTemplate>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicSessionTemplate>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken);
+    Task<AcademicSessionTemplate> GetAsync(int id, CancellationToken cancellationToken);
 }
 
 public class AcademicSessionTemplatesRepository : IAcademicSessionTemplatesRepository
@@ -47,73 +45,6 @@ public class AcademicSessionTemplatesRepository : IAcademicSessionTemplatesRepos
         }
         
         return @new;
-    }
-
-    public async Task<IEnumerable<AcademicSessionTemplateViewModel>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        var result = (
-                from st in _context.AcademicSessionTemplates
-                join i in _context.Institutions on st.InstitutionId equals i.Id
-                select new AcademicSessionTemplateViewModel
-                { 
-                    Id = st.Id, 
-                    InstitutionId = st.InstitutionId,
-                    TemplateName = st.TemplateName,
-                    InstitutionName = i.Name
-                }).ToListAsync(cancellationToken);
-
-        return await result;
-    }
-
-    public async Task<AcademicSessionTemplateViewModel> GetAsync(int id, CancellationToken cancellationToken)
-    {
-        var result = (
-                from st in _context.AcademicSessionTemplates
-                join i in _context.Institutions on st.InstitutionId equals i.Id
-                where st.Id == id
-                select new AcademicSessionTemplateViewModel
-                {
-                    Id = st.Id,
-                    InstitutionId = st.InstitutionId,
-                    TemplateName = st.TemplateName,
-                    InstitutionName = i.Name
-                }).FirstOrDefaultAsync(cancellationToken);
-
-        return await result;
-    }
-
-    public async Task<IEnumerable<AcademicSessionTemplateViewModel>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken)
-    {
-        var result = (
-                from st in _context.AcademicSessionTemplates
-                join i in _context.Institutions on st.InstitutionId equals i.Id
-                where st.InstitutionId == institutionId
-                select new AcademicSessionTemplateViewModel
-                {
-                    Id = st.Id,
-                    InstitutionId = st.InstitutionId,
-                    TemplateName = st.TemplateName,
-                    InstitutionName = i.Name
-                }).ToListAsync(cancellationToken);
-
-        return await result;
-    }
-
-    public async Task<IEnumerable<AcademicSessionTemplateViewModel>> GetListByQueryAsync(CancellationToken cancellationToken)
-    {
-        var result = (
-                from st in _context.AcademicSessionTemplates
-                join i in _context.Institutions on st.InstitutionId equals i.Id
-                select new AcademicSessionTemplateViewModel
-                {
-                    Id = st.Id,
-                    InstitutionId = st.InstitutionId,
-                    TemplateName = st.TemplateName,
-                    InstitutionName = i.Name
-                }
-                ).ToListAsync(cancellationToken);
-
-        return await result;
     }
 
     public async Task<AcademicSessionTemplate> UpdateAsync(AcademicSessionTemplate institution, CancellationToken cancellationToken)
@@ -148,7 +79,45 @@ public class AcademicSessionTemplatesRepository : IAcademicSessionTemplatesRepos
             _logger.LogError(ex, ex.Message);
             throw;
         }
-        
+
         return null;
+    }
+
+    public async Task<IEnumerable<AcademicSessionTemplate>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        var result = await _context.AcademicSessionTemplates
+            .Include(x => x.Institution)
+            .ToListAsync(cancellationToken);
+
+        return result;
+    }
+
+    public async Task<AcademicSessionTemplate> GetAsync(int id, CancellationToken cancellationToken)
+    {
+        var result = await _context.AcademicSessionTemplates
+            .Where(x => x.Id == id)
+            .Include(x => x.Institution)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return result;
+    }
+
+    public async Task<IEnumerable<AcademicSessionTemplate>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken)
+    {
+        var result = await _context.AcademicSessionTemplates
+            .Where(x => x.InstitutionId == institutionId)
+             .Include(x => x.Institution)
+             .ToListAsync(cancellationToken);
+
+        return result;
+    }
+
+    public async Task<IEnumerable<AcademicSessionTemplate>> GetListByQueryAsync(CancellationToken cancellationToken)
+    {
+        var result = await _context.AcademicSessionTemplates
+            .Include(x => x.Institution)
+            .ToListAsync(cancellationToken);
+
+        return result;
     }
 }

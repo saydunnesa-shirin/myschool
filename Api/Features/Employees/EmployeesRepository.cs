@@ -9,9 +9,9 @@ public interface IEmployeesRepository
     Task<Employee> CreateAsync(Employee newEmployee, CancellationToken cancellationToken);
     Task<Employee> UpdateAsync(Employee employee, CancellationToken cancellationToken);
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
-    Task<IEnumerable<EmployeeViewModel>> GetListByQueryAsync(EmployeeQuery query, CancellationToken cancellationToken);
-    Task<EmployeeViewModel> GetByIdyAsync(int id, CancellationToken cancellationToken);
-    Task<EmployeeViewModel> GetByEmailAsync(string email, CancellationToken cancellationToken);
+    Task<IEnumerable<Employee>> GetListByQueryAsync(EmployeeQuery query, CancellationToken cancellationToken);
+    Task<Employee> GetByIdyAsync(int id, CancellationToken cancellationToken);
+    Task<Employee> GetByEmailAsync(string email, CancellationToken cancellationToken);
 }
 
 public class EmployeesRepository : IEmployeesRepository
@@ -82,126 +82,37 @@ public class EmployeesRepository : IEmployeesRepository
         return null;
     }
 
-    public async Task<IEnumerable<EmployeeViewModel>> GetListByQueryAsync(EmployeeQuery query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Employee>> GetListByQueryAsync(EmployeeQuery query, CancellationToken cancellationToken)
     {
-        var result = (
-                from e in _context.Employees
-                join c in _context.Countries on e.CountryId equals c.Id
-                where 0 == 0
-                    && (query.DesignationId == null || e.DesignationId == query.DesignationId)
-                    && (query.InstitutionId == null || e.InstitutionId == query.InstitutionId)
-                select new EmployeeViewModel
-                {
-                    Id = e.Id,
-                    CountryId = e.CountryId,
-                    EmployeeId = e.EmployeeId,
-                    FirstName = e.FirstName,
-                    LastName = e.LastName,
-                    BloodGroupId = e.BloodGroupId,
-                    City = e.City,
-                    CreatedBy = e.CreatedBy,
-                    CreatedDate = e.CreatedDate,
-                    DateOfBirth = e.DateOfBirth,
-                    DesignationId = e.DesignationId,
-                    Email = e.Email,
-                    EmployeeTypeId = e.EmployeeTypeId,
-                    FatherName = e.FatherName,
-                    MotherName = e.MotherName,
-                    GenderId = e.GenderId,
-                    InstitutionId = e.InstitutionId,
-                    IsActive = e.IsActive,
-                    JoinDate = e.JoinDate,
-                    Mobile = e.Mobile,
-                    PostalCode = e.PostalCode,
-                    State = e.State,
-                    Street = e.Street,
-                    UpdatedBy = e.UpdatedBy,
-                    UpdatedDate = e.UpdatedDate,
+        var result = await _context.Employees
+            .Where(x => (query.DesignationId == null || x.DesignationId == query.DesignationId) &&
+                        (query.InstitutionId == null || x.InstitutionId == query.InstitutionId)) 
+            .Include(x => x.Institution)
+            .Include(x => x.Country)
+            .ToListAsync(cancellationToken);
 
-                    CountryName = c.Name
-                }).ToListAsync(cancellationToken);
-
-        return await result;
+        return result;
     }
 
-    public async Task<EmployeeViewModel> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    public async Task<Employee> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
-        var result = (
-                 from e in _context.Employees
-                 join c in _context.Countries on e.CountryId equals c.Id
-                 where e.Email == email
-                 select new EmployeeViewModel
-                 {
-                     Id = e.Id,
-                     CountryId = e.CountryId,
-                     EmployeeId = e.EmployeeId,
-                     FirstName = e.FirstName,
-                     LastName = e.LastName,
-                     BloodGroupId = e.BloodGroupId,
-                     City = e.City,
-                     CreatedBy = e.CreatedBy,
-                     CreatedDate = e.CreatedDate,
-                     DateOfBirth = e.DateOfBirth,
-                     DesignationId = e.DesignationId,
-                     Email = e.Email,
-                     EmployeeTypeId = e.EmployeeTypeId,
-                     FatherName = e.FatherName,
-                     MotherName = e.MotherName,
-                     GenderId = e.GenderId,
-                     InstitutionId = e.InstitutionId,
-                     IsActive = e.IsActive,
-                     JoinDate = e.JoinDate,
-                     Mobile = e.Mobile,
-                     PostalCode = e.PostalCode,
-                     State = e.State,
-                     Street = e.Street,
-                     UpdatedBy = e.UpdatedBy,
-                     UpdatedDate = e.UpdatedDate,
+        var result = await _context.Employees
+            .Where(x => x.Email == email)
+            .Include(x => x.Institution)
+            .Include(x => x.Country)
+            .FirstOrDefaultAsync(cancellationToken);
 
-                     CountryName = c.Name
-                 }).FirstOrDefaultAsync(cancellationToken);
-
-        return await result;
+        return result;
     }
 
-    public async Task<EmployeeViewModel> GetByIdyAsync(int id, CancellationToken cancellationToken)
+    public async Task<Employee> GetByIdyAsync(int id, CancellationToken cancellationToken)
     {
-        var result = (
-                from e in _context.Employees
-                join c in _context.Countries on e.CountryId equals c.Id
-                where e.Id == id
-                select new EmployeeViewModel
-                {
-                    Id = e.Id,
-                    CountryId = e.CountryId,
-                    EmployeeId = e.EmployeeId,
-                    FirstName = e.FirstName,
-                    LastName = e.LastName,
-                    BloodGroupId = e.BloodGroupId,
-                    City = e.City,
-                    CreatedBy = e.CreatedBy,
-                    CreatedDate = e.CreatedDate,    
-                    DateOfBirth = e.DateOfBirth,
-                    DesignationId = e.DesignationId,
-                    Email = e.Email,
-                    EmployeeTypeId = e.EmployeeTypeId,
-                    FatherName = e.FatherName,
-                    MotherName = e.MotherName,
-                    GenderId = e.GenderId,
-                    InstitutionId = e.InstitutionId,
-                    IsActive = e.IsActive,
-                    JoinDate = e.JoinDate,
-                    Mobile = e.Mobile,
-                    PostalCode = e.PostalCode,
-                    State = e.State,
-                    Street = e.Street,
-                    UpdatedBy = e.UpdatedBy,
-                    UpdatedDate = e.UpdatedDate,
-                   
-                    CountryName = c.Name
-                }
-                ).FirstOrDefaultAsync(cancellationToken);
+        var result = await _context.Employees
+            .Where(x => x.Id == id)
+            .Include(x => x.Institution)
+            .Include(x => x.Country)
+            .FirstOrDefaultAsync(cancellationToken);
 
-        return await result;
+        return result;
     }
 }

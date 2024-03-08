@@ -12,8 +12,8 @@ public class MappingProfiles : Profile
 
     private void GetList()
     {
-        CreateMap<InstitutionViewModel, GetInstitutions.Result>();
-        CreateMap<InstitutionViewModel, CreateInstitution.Result>();
-        CreateMap<InstitutionViewModel, UpdateInstitution.Result>();
+        CreateMap<Institution, InstitutionResult>(MemberList.None)
+            .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name))
+            .ForMember(dest => dest.CountryName, opt => opt.MapFrom((src, dest) => src.Country.Name));
     }
 }

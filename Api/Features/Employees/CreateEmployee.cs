@@ -6,7 +6,7 @@ namespace Api.Features.Employees;
 
 public class CreateEmployee
 {
-    public record Command : IRequest<Result>
+    public record Command : IRequest<EmployeeResult>
     {
         public string EmployeeId { get; set; } = string.Empty;
         public int EmployeeTypeId { get; set; }
@@ -37,11 +37,7 @@ public class CreateEmployee
         public string FatherName { get; set; } = string.Empty;
     }
 
-    public record Result : BaseResult
-    {
-    }
-
-    public class Handler : IRequestHandler<Command, Result>
+    public class Handler : IRequestHandler<Command, EmployeeResult>
     {
         private readonly IMapper _mapper;
         private readonly IEmployeesRepository _repository;
@@ -57,7 +53,7 @@ public class CreateEmployee
             _mapper = mapper;
         }
 
-        public async Task<Result> Handle(
+        public async Task<EmployeeResult> Handle(
           Command command,
           CancellationToken cancellationToken)
         {
@@ -89,7 +85,7 @@ public class CreateEmployee
             var seved = await _repository.CreateAsync(employeeToCreate, cancellationToken);
             var employee = await _repository.GetByIdyAsync(seved.Id, cancellationToken);
 
-            var mappedEmployee = _mapper.Map<EmployeeViewModel, Result>(employee);
+            var mappedEmployee = _mapper.Map<Employee, EmployeeResult>(employee);
 
             return mappedEmployee;
         }
