@@ -11,5 +11,6 @@ public record AcademicSessionResult
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string InstitutionName { get; set; } = string.Empty;
+    public bool IsActive { get; set; }
     public ICollection<AcademicClassResult> AcademicClasses { get; set; }
 }

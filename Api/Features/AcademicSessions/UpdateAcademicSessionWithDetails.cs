@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Api.Features.AcademicSessions;
 
-public class CreateAcademicSessionWithDetails
+public class UpdateAcademicSessionWithDetails
 {
     public record Command : IRequest<AcademicSessionResult>
     {
@@ -36,8 +36,9 @@ public class CreateAcademicSessionWithDetails
           CancellationToken cancellationToken)
         {
             List<AcademicClass> AcademicClasses = new();
-            var @new = new AcademicSession
+            var academicSession = new AcademicSession
             {
+                Id = command.Id,
                 Name = command.Name,
                 InstitutionId = command.InstitutionId,
                 Description = command.Description,
@@ -63,7 +64,7 @@ public class CreateAcademicSessionWithDetails
                 }
             }
 
-            var saved = await _repository.CreateWithDetailsAsync(@new, AcademicClasses, cancellationToken);
+            var saved = await _repository.UpdateWithDetailsAsync(academicSession, AcademicClasses, cancellationToken);
 
             var AcademicSession = await _repository.GetAsync(saved.Id, cancellationToken);
 

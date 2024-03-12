@@ -7,4 +7,5 @@ public record AcademicClassResult
     public int AcademicSessionId { get; set; }
     public int? TeacherId { get; set; }
     public string Name { get; set; }
+    public bool IsActive { get; set; }
 }

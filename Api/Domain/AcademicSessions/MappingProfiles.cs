@@ -15,6 +15,10 @@ namespace Api.Domain.AcademicSessions
             CreateMap<AcademicSession, AcademicSessionResult>(MemberList.None)
             .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name))
             .ForMember(dest => dest.InstitutionName, opt => opt.MapFrom((src, dest) => src.Institution.Name));
+
+            CreateMap<AcademicSession, GetAcademicSessions.Result>(MemberList.None)
+           .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name))
+           .ForMember(dest => dest.InstitutionName, opt => opt.MapFrom((src, dest) => src.Institution.Name));
         }
     }
 }

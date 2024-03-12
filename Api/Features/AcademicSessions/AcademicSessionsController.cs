@@ -34,6 +34,23 @@ public class AcademicSessionsController : Controller
     }
 
     /// <remarks>
+    ///   Update AcademicSession
+    /// </remarks>
+    [HttpPut]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public async Task<ActionResult<AcademicSessionResult>> UpdateAsync(
+      UpdateAcademicSession.Command command,
+      CancellationToken cancellationToken)
+    {
+        return Ok(await _sender.Send(command, cancellationToken));
+    }
+
+    /// <remarks>
     ///   Create AcademicSession with detail
     /// </remarks>
     [HttpPost("Create")]
@@ -51,22 +68,22 @@ public class AcademicSessionsController : Controller
     }
 
     /// <remarks>
-    ///   Update AcademicSession
+    ///   Update AcademicSession with detail
     /// </remarks>
-    [HttpPut]
+    [HttpPost("Update")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<AcademicSessionResult>> UpdateAsync(
-      UpdateAcademicSession.Command command,
+    public async Task<ActionResult<AcademicSessionResult>> UpdateWithDetailAsync(
+      UpdateAcademicSessionWithDetails.Command command,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(command, cancellationToken));
     }
-
+    
     /// <remarks>
     ///   Delete AcademicSession
     /// </remarks>
