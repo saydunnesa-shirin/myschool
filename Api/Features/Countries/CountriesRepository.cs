@@ -8,7 +8,7 @@ public interface ICountriesRepository
 {
     Task<Country> CreateAsync(Country @new, CancellationToken cancellationToken);
     Task<Country> UpdateAsync(Country country, CancellationToken cancellationToken);
-
+    Task<Country> GetAsync(int id, CancellationToken cancellationToken);
     Task<IEnumerable<Country>> GetAllAsync(CancellationToken cancellationToken);
     Task<IEnumerable<Country>> GetListByQueryAsync(CancellationToken cancellationToken);
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
@@ -45,6 +45,16 @@ public class CountriesRepository : ICountriesRepository
         return @new;
     }
 
+    public async Task<Country> GetAsync(int id, CancellationToken cancellationToken)
+    {
+        //return await _context.Countries.ToListAsync(cancellationToken);
+        var result = await _context.Countries
+            .Where(x => x.Id == id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return result;
+    }
+
     public async Task<IEnumerable<Country>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _context.Countries.ToListAsync(cancellationToken);
@@ -59,7 +69,7 @@ public class CountriesRepository : ICountriesRepository
     {
         try
         {
-            _ = _context.Countries.Update(country);
+            //_ = _context.Countries.Update(country);
             _ = await _context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)

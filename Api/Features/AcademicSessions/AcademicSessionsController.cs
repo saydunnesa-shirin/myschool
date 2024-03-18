@@ -70,7 +70,7 @@ public class AcademicSessionsController : Controller
     /// <remarks>
     ///   Update AcademicSession with detail
     /// </remarks>
-    [HttpPost("Update")]
+    [HttpPut("Update")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
