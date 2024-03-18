@@ -34,12 +34,15 @@ public class UpdateCountry
           Command command,
           CancellationToken cancellationToken)
         {
-            var country = new Country
+            
+            var country = await _repository.GetAsync(command.Id, cancellationToken);
+            if (country != null)
             {
-                Id = command.Id,
-                Name = command.Name,
-                Iso2Code = command.Iso2Code
-            };
+                country.Name = command.Name;
+                country.Iso2Code = command.Iso2Code;
+                country.UpdatedBy = 0;
+                country.UpdatedDate = DateTime.UtcNow;
+            }
             var updated = await _repository.UpdateAsync(country, cancellationToken);
             var mappedEmployee = _mapper.Map<Country, Result>(updated);
 

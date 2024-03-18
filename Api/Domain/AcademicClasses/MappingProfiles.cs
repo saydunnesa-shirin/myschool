@@ -13,8 +13,8 @@ namespace Api.Domain.AcademicClasses
         private void GetList()
         {
             CreateMap<AcademicClass, AcademicClassResult>(MemberList.None)
-            .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name))
-            .ForMember(dest => dest.TeacherId, opt => opt.MapFrom((src, dest) => src.InstitutionId));
+            .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name));
+            //.ForMember(dest => dest.TeacherName, opt => opt.MapFrom((src, dest) => src.Teacher.FirstName));
         }
     }
 }

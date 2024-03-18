@@ -50,6 +50,7 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
             .Where(x => x.Id == id)
             .Include(x => x.AcademicClasses)
             .Include(x => x.Institution)
+
             .FirstOrDefaultAsync(cancellationToken);
 
         return result;
