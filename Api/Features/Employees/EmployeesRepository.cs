@@ -50,7 +50,6 @@ public class EmployeesRepository : IEmployeesRepository
     {
         try
         {
-            _ = _context.Employees.Update(employee);
             _ = await _context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)

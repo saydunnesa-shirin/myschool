@@ -87,7 +87,6 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
     {
         try
         {
-            _ = _context.AcademicSessions.Update(institution);
             _ = await _context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)

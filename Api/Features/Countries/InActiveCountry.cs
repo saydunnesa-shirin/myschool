@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Api.Features.Countries;
 
-public class UpdateCountry
+public class InActiveCountry
 {
     public record Command : IRequest<Result>
     {
@@ -37,8 +37,7 @@ public class UpdateCountry
         {
             var countryToUpdate = await _repository.GetAsync(command.Id, cancellationToken) ?? throw new NotFoundException("Not found");
 
-            countryToUpdate.Name = command.Name;
-            countryToUpdate.Iso2Code = command.Iso2Code;
+            countryToUpdate.IsActive = false;
             countryToUpdate.UpdatedBy = 0;
             countryToUpdate.UpdatedDate = DateTime.UtcNow;
 

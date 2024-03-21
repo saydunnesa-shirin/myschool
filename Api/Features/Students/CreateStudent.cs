@@ -1,49 +1,45 @@
-using Api.Domain.Employees;
+using Api.Domain.Students;
 using AutoMapper;
 using MediatR;
 
-namespace Api.Features.Employees;
+namespace Api.Features.Students;
 
-public class CreateEmployee
+public class CreateStudent
 {
-    public record Command : IRequest<EmployeeResult>
+    public record Command : IRequest<StudentResult>
     {
-        public string EmployeeId { get; set; } 
-        public int EmployeeTypeId { get; set; }
-        public DateTime JoinDate { get; set; }
-        public int DesignationId { get; set; }
+        public string StudentId { get; set; } 
+        public DateTime AdmissionDate { get; set; }
         public int InstitutionId { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; } 
-        public string Mobile { get; set; } 
-        public string Email { get; set; } 
-
+        public string? Mobile { get; set; }
+        public string? Email { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
         public int? GenderId { get; set; }
         public int? BloodGroupId { get; set; }
 
-
         // Additional
         public int? CountryId { get; set; }
         public string? Street { get; set; } 
-        public string? City { get; set; } 
-        public string? State { get; set; } 
-        public string? PostalCode { get; set; } 
+        public string City { get; set; } 
+        public string State { get; set; } 
+        public string PostalCode { get; set; } 
 
         // Other information
-        public string? MotherName { get; set; } 
-        public string? FatherName { get; set; } 
+        public string MotherName { get; set; } 
+        public string FatherName { get; set; } 
     }
 
-    public class Handler : IRequestHandler<Command, EmployeeResult>
+    public class Handler : IRequestHandler<Command, StudentResult>
     {
         private readonly IMapper _mapper;
-        private readonly IEmployeesRepository _repository;
+        private readonly IStudentsRepository _repository;
 
         public Handler(
-          IEmployeesRepository repository,
+          IStudentsRepository repository,
           IMapper mapper)
         {
             ArgumentNullException.ThrowIfNull(repository);
@@ -53,16 +49,14 @@ public class CreateEmployee
             _mapper = mapper;
         }
 
-        public async Task<EmployeeResult> Handle(
+        public async Task<StudentResult> Handle(
           Command command,
           CancellationToken cancellationToken)
         {
-            var employeeToCreate = new Employee
+            var studentToCreate = new Student
             {
-                EmployeeId = command.EmployeeId,
-                JoinDate = command.JoinDate,
-                EmployeeTypeId = command.EmployeeTypeId,
-                DesignationId = command.DesignationId,
+                StudentId = command.StudentId,
+                AdmissionDate = command.AdmissionDate,
                 InstitutionId = command.InstitutionId,
 
                 FirstName = command.FirstName,
@@ -82,12 +76,12 @@ public class CreateEmployee
                 MotherName = command.MotherName
             };
             
-            var seved = await _repository.CreateAsync(employeeToCreate, cancellationToken);
-            var employee = await _repository.GetByIdyAsync(seved.Id, cancellationToken);
+            var seved = await _repository.CreateAsync(studentToCreate, cancellationToken);
+            var student = await _repository.GetByIdyAsync(seved.Id, cancellationToken);
 
-            var mappedEmployee = _mapper.Map<Employee, EmployeeResult>(employee);
+            var mappedStudent = _mapper.Map<Student, StudentResult>(student);
 
-            return mappedEmployee;
+            return mappedStudent;
         }
     }
 }

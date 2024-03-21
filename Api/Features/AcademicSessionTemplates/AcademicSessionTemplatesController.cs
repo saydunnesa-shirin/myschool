@@ -101,4 +101,21 @@ public class AcademicSessionTemplatesController : Controller
         GetAcademicSessionTemplate.Query query = new() { Id = Convert.ToInt32(id) };
         return Ok(await _sender.Send(query, cancellationToken));
     }
+
+    /// <remarks>
+    /// Soft Delete AcademicSessionTemplate
+    /// </remarks>
+    [HttpDelete("Delete")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionTemplateResult))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public async Task<ActionResult<AcademicSessionTemplateResult>> DeleteAsync(
+      InActiveAcademicSessionTemplate.Command command,
+      CancellationToken cancellationToken)
+    {
+        return Ok(await _sender.Send(command, cancellationToken));
+    }
 }

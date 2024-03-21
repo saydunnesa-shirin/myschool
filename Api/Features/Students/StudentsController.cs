@@ -1,35 +1,33 @@
 using System.Net;
-using Api.Features.Countries;
-using Api.Features.Students;
 using Api.Infrastructure.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static Api.Features.Employees.GetEmployee;
+using static Api.Features.Students.GetStudent;
 
-namespace Api.Features.Employees;
+namespace Api.Features.Students;
 
 [ApiController]
 [Route("[controller]")]
-public class EmployeesController : ControllerBase
+public class StudentsController : ControllerBase
 {
     private readonly ISender _sender;
 
-    public EmployeesController(ISender sender)
+    public StudentsController(ISender sender)
     {
         _sender = sender;
     }
 
     /// <remarks>
-    ///   Get single employee
+    ///   Get single student
     /// </remarks>
     [HttpGet("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(StudentResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<EmployeeResult>> GetAsync(
+    public async Task<ActionResult<StudentResult>> GetAsync(
       string id,
       CancellationToken cancellationToken)
     {
@@ -38,85 +36,85 @@ public class EmployeesController : ControllerBase
     }
 
     /// <remarks>
-    ///   Get list of employees based on query filters
+    ///   Get list of students based on query filters
     /// </remarks>
     [HttpPost("query")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<EmployeeResult>))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<StudentResult>))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<List<EmployeeResult>>> GetListByQueryAsync(
-      GetEmployees.Query query,
+    public async Task<ActionResult<List<StudentResult>>> GetListByQueryAsync(
+      GetStudents.Query query,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(query, cancellationToken));
     }
 
     /// <remarks>
-    ///   Create employee
+    ///   Create student
     /// </remarks>
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(StudentResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<EmployeeResult>> CreateAsync(
-      CreateEmployee.Command command,
+    public async Task<ActionResult<StudentResult>> CreateAsync(
+      CreateStudent.Command command,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(command, cancellationToken));
     }
 
     /// <remarks>
-    ///   Update employee
+    ///   Update student
     /// </remarks>
     [HttpPut]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(StudentResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<EmployeeResult>> UpdateAsync(
-      UpdateEmployee.Command command,
+    public async Task<ActionResult<StudentResult>> UpdateAsync(
+      UpdateStudent.Command command,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(command, cancellationToken));
     }
 
     /// <remarks>
-    ///   Delete employee
+    ///   Delete student
     /// </remarks>
     [HttpDelete]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(StudentResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<EmployeeResult>> DeleteAsync(
-      DeleteEmployee.Command command,
+    public async Task<ActionResult<StudentResult>> DeleteAsync(
+      DeleteStudent.Command command,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(command, cancellationToken));
     }
 
     /// <remarks>
-    /// Soft Delete employee
+    /// Soft Delete student
     /// </remarks>
     [HttpDelete("Delete")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(EmployeeResult))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(StudentResult))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
-    public async Task<ActionResult<EmployeeResult>> DeleteAsync(
-      InActiveEmployee.Command command,
+    public async Task<ActionResult<StudentResult>> DeleteAsync(
+      InActiveStudent.Command command,
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(command, cancellationToken));

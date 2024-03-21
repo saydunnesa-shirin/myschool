@@ -69,7 +69,6 @@ public class CountriesRepository : ICountriesRepository
     {
         try
         {
-            //_ = _context.Countries.Update(country);
             _ = await _context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)

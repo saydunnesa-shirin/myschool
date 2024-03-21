@@ -1,4 +1,5 @@
-﻿using Api.Infrastructure.Exceptions;
+﻿using Api.Features.Students;
+using Api.Infrastructure.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -85,5 +86,22 @@ public class CountriesController : Controller
       CancellationToken cancellationToken)
     {
         return Ok(await _sender.Send(query, cancellationToken));
+    }
+
+    /// <remarks>
+    /// Soft Delete country
+    /// </remarks>
+    [HttpDelete("Delete")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(InActiveCountry.Result))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public async Task<ActionResult<InActiveCountry.Result>> DeleteAsync(
+      InActiveCountry.Command command,
+      CancellationToken cancellationToken)
+    {
+        return Ok(await _sender.Send(command, cancellationToken));
     }
 }

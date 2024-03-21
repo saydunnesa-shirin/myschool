@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Api.Features.Institutions;
 
-public class UpdateInstitution
+public class InActiveInstitution
 {
     public record Command : IRequest<InstitutionResult>
     {
@@ -33,17 +33,13 @@ public class UpdateInstitution
           CancellationToken cancellationToken)
         {
             var institutionToUpdate = await _repository.GetAsync(command.Id, cancellationToken) ?? throw new NotFoundException("Not found");
-            institutionToUpdate.Name = command.Name;
-            institutionToUpdate.Address = command.Address;
-            institutionToUpdate.CountryId = command.CountryId;
+            institutionToUpdate.IsActive = false;
             institutionToUpdate.UpdatedBy = 0;
             institutionToUpdate.UpdatedDate = DateTime.UtcNow;
-           
+
             var updated = await _repository.UpdateAsync(institutionToUpdate, cancellationToken);
 
-            var institution = await _repository.GetAsync(updated.Id, cancellationToken);
-
-            var mapped = _mapper.Map<Institution, InstitutionResult>(institution);
+            var mapped = _mapper.Map<Institution, InstitutionResult>(updated);
 
             return mapped;
         }
