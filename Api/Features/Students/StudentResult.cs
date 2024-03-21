@@ -1,18 +1,16 @@
-namespace Api.Features.Employees;
+namespace Api.Features.Students;
 
-public record EmployeeResult
+public record StudentResult
 {
     public int Id { get; set; }
-    public string EmployeeId { get; set; } 
-    public int EmployeeTypeId { get; set; }
-    public DateTime JoinDate { get; set; }
-    public int DesignationId { get; set; }
+    public string StudentId { get; set; } 
+    public DateTime AdmissionDate { get; set; }
     public int InstitutionId { get; set; }
 
     public string FirstName { get; set; }
     public string LastName { get; set; } 
-    public string Mobile { get; set; } 
-    public string Email { get; set; } 
+    public string? Mobile { get; set; } 
+    public string? Email { get; set; } 
     public DateTime? DateOfBirth { get; set; }
     public int? GenderId { get; set; }
     public int? BloodGroupId { get; set; }
@@ -25,8 +23,15 @@ public record EmployeeResult
     public string? PostalCode { get; set; } 
 
     // Other information
-    public string? MotherName { get; set; } 
-    public string? FatherName { get; set; }
+    public string MotherName { get; set; } 
+    public string FatherName { get; set; } 
+    public bool IsActive { get; set; }
     public string? CountryName { get; set; }
-    public string? InstitutionName { get; set; }
+    public string InstitutionName { get; set; }
+    
+    public DateTime CreatedDate { get; set; }
+    public int CreatedBy { get; set; }
+    public DateTime UpdatedDate { get; set; }
+    public int UpdatedBy { get; set; }
+
 }

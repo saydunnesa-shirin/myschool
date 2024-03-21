@@ -45,6 +45,8 @@ public class UpdateAcademicSessionWithDetails
                 Description = command.Description,
                 StartDate = command.StartDate,
                 EndDate = command.EndDate,
+                UpdatedBy = 0,
+                UpdatedDate = DateTime.UtcNow
                 //IsActive = command.IsActive
             };
 
@@ -58,7 +60,9 @@ public class UpdateAcademicSessionWithDetails
                         Name = item.Name,
                         InstitutionId = item.InstitutionId,
                         TeacherId = item.TeacherId,
-                        IsActive = item.IsActive
+                        IsActive = item.IsActive,
+                        UpdatedBy = 0,
+                        UpdatedDate = DateTime.UtcNow
                     };
 
                     AcademicClasses.Add(@detail);

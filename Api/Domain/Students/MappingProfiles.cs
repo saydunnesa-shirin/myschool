@@ -1,7 +1,7 @@
-using Api.Features.Employees;
+using Api.Features.Students;
 using AutoMapper;
 
-namespace Api.Domain.Employees;
+namespace Api.Domain.Students;
 
 public class MappingProfiles : Profile
 {
@@ -12,9 +12,8 @@ public class MappingProfiles : Profile
 
     private void GetList()
     {
-        CreateMap<Employee, EmployeeResult>(MemberList.None)
+        CreateMap<Student, StudentResult>(MemberList.None)
             .ForMember(dest => dest.InstitutionName, opt => opt.MapFrom((src, dest) => src.Institution.Name))
-            //.ForMember(dest => dest.CountryName, opt => opt.MapFrom((src, dest) => src.Country.Name));
             .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country.Id == null ? "" : src.Country.Name));
     }
 }

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Api.Features.AcademicSessionTemplates;
 
-public class UpdateAcademicSessionTemplate
+public class InActiveAcademicSessionTemplate
 {
     public record Command : IRequest<AcademicSessionTemplateResult>
     {
@@ -33,8 +33,7 @@ public class UpdateAcademicSessionTemplate
         {
             var academicSessionTemplateToUpdate = await _repository.GetAsync(command.Id, cancellationToken) ?? throw new NotFoundException("Not found");
 
-            academicSessionTemplateToUpdate.TemplateName = command.TemplateName;
-            academicSessionTemplateToUpdate.InstitutionId = command.InstitutionId;
+            academicSessionTemplateToUpdate.IsActive = false;
             academicSessionTemplateToUpdate.UpdatedBy = 0;
             academicSessionTemplateToUpdate.UpdatedDate = DateTime.UtcNow;
            

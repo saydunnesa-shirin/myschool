@@ -68,7 +68,6 @@ public class InstitutionsRepository : IInstitutionsRepository
     {
         try
         {
-            _ = _context.Institutions.Update(institution);
             _ = await _context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)

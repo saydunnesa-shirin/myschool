@@ -4,7 +4,7 @@ using Api.Features.AcademicClasses;
 using Api.Features.AcademicSessions;
 using Api.Features.AcademicSessionTemplates;
 using Api.Features.Countries;
-using Api.Features.Employees;
+using Api.Features.Students;
 using Api.Features.Institutions;
 using Api.Infrastructure;
 using Api.Infrastructure.Authorization;
@@ -21,6 +21,7 @@ using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Api.Features.Employees;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,12 +79,13 @@ builder.Services.Configure<VaultSecretsConfiguration>(
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICorrelationIdGenerator, CorrelationIdGenerator>();
 
-builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
-builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-builder.Services.AddScoped<IInstitutionsRepository, InstitutionsRepository>();
-builder.Services.AddScoped<IAcademicSessionTemplatesRepository, AcademicSessionTemplatesRepository>();
-builder.Services.AddScoped<IAcademicSessionsRepository, AcademicSessionsRepository>();
 builder.Services.AddScoped<IAcademicClassesRepository, AcademicClassesRepository>();
+builder.Services.AddScoped<IAcademicSessionsRepository, AcademicSessionsRepository>();
+builder.Services.AddScoped<IAcademicSessionTemplatesRepository, AcademicSessionTemplatesRepository>();
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+builder.Services.AddScoped<IInstitutionsRepository, InstitutionsRepository>();
+builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
 
 // Serilog with Two-stage initialization, latter inits from appsettings.json
 Log.Logger = new LoggerConfiguration()

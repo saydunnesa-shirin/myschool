@@ -1,4 +1,5 @@
-﻿using Api.Infrastructure.Exceptions;
+﻿using Api.Features.Countries;
+using Api.Infrastructure.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -134,5 +135,22 @@ public class AcademicSessionsController : Controller
     {
         GetAcademicSession.Query query = new() { Id = Convert.ToInt32(id) };
         return Ok(await _sender.Send(query, cancellationToken));
+    }
+
+    /// <remarks>
+    /// Soft Delete AcademicSession
+    /// </remarks>
+    [HttpDelete("Delete")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(AcademicSessionResult))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public async Task<ActionResult<InActiveCountry.Result>> DeleteAsync(
+      InActiveAcademicSession.Command command,
+      CancellationToken cancellationToken)
+    {
+        return Ok(await _sender.Send(command, cancellationToken));
     }
 }

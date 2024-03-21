@@ -51,7 +51,6 @@ public class AcademicSessionTemplatesRepository : IAcademicSessionTemplatesRepos
     {
         try
         {
-            _ = _context.AcademicSessionTemplates.Update(institution);
             _ = await _context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
