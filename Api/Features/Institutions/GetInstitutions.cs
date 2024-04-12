@@ -10,6 +10,7 @@ public class GetInstitutions
     {
         public int? Id { get; set; }
         public string Term { get; set; } = string.Empty;
+        public bool? IsActive { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, List<InstitutionResult>>
@@ -30,8 +31,14 @@ public class GetInstitutions
           CancellationToken cancellationToken)
         {
             List<InstitutionResult> mappedList = new();
-            
-            var list = await _repository.GetAllAsync(cancellationToken);
+
+            var institutionQuery = new InstitutionQuery
+            {
+                IsActive = query.IsActive
+            };
+
+            var list = await _repository.GetAllAsync(institutionQuery, cancellationToken);
+
             foreach (var institution in list)
             {
                 var mapped = _mapper.Map<Institution, InstitutionResult>(institution);

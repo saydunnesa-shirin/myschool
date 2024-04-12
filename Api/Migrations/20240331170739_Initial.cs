@@ -188,6 +188,64 @@ namespace Api.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstitutionId = table.Column<int>(type: "int", nullable: false),
+                    AdmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ActiveSessionId = table.Column<int>(type: "int", nullable: false),
+                    ActiveClassId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    StatusReasonId = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Mobile = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GenderId = table.Column<int>(type: "int", nullable: true),
+                    BloodGroupId = table.Column<int>(type: "int", nullable: true),
+                    CountryId = table.Column<int>(type: "int", nullable: true),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MotherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FatherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_AcademicClasses_ActiveClassId",
+                        column: x => x.ActiveClassId,
+                        principalTable: "AcademicClasses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Students_AcademicSessions_ActiveSessionId",
+                        column: x => x.ActiveSessionId,
+                        principalTable: "AcademicSessions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Students_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Students_Institutions_InstitutionId",
+                        column: x => x.InstitutionId,
+                        principalTable: "Institutions",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AcademicClasses_AcademicSessionId",
                 table: "AcademicClasses",
@@ -227,16 +285,39 @@ namespace Api.Migrations
                 name: "IX_Institutions_CountryId",
                 table: "Institutions",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_ActiveClassId",
+                table: "Students",
+                column: "ActiveClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_ActiveSessionId",
+                table: "Students",
+                column: "ActiveSessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_CountryId",
+                table: "Students",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_InstitutionId",
+                table: "Students",
+                column: "InstitutionId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AcademicClasses");
+                name: "AcademicSessionTemplates");
 
             migrationBuilder.DropTable(
-                name: "AcademicSessionTemplates");
+                name: "Students");
+
+            migrationBuilder.DropTable(
+                name: "AcademicClasses");
 
             migrationBuilder.DropTable(
                 name: "AcademicSessions");

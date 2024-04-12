@@ -18,10 +18,21 @@ public class MySchoolContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AcademicClass>()
+            .HasMany(x => x.Students)
+            .WithOne(y => y.AcademicClass)
+            .HasForeignKey(y => y.ActiveClassId)
+            .OnDelete(DeleteBehavior.NoAction);
+
         modelBuilder.Entity<AcademicSession>()
             .HasMany(x => x.AcademicClasses)
             .WithOne(y => y.AcademicSession)
             .HasForeignKey(y => y.AcademicSessionId)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<AcademicSession>()
+            .HasMany(x => x.Students)
+            .WithOne(y => y.AcademicSession)
+            .HasForeignKey(y => y.ActiveSessionId)
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Country>()

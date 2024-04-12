@@ -10,7 +10,7 @@ public interface ICountriesRepository
     Task<Country> UpdateAsync(Country country, CancellationToken cancellationToken);
     Task<Country> GetAsync(int id, CancellationToken cancellationToken);
     Task<IEnumerable<Country>> GetAllAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<Country>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<Country>> GetListByQueryAsync(CountryQuery query, CancellationToken cancellationToken);
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
 }
 
@@ -60,9 +60,11 @@ public class CountriesRepository : ICountriesRepository
         return await _context.Countries.ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Country>> GetListByQueryAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Country>> GetListByQueryAsync(CountryQuery query, CancellationToken cancellationToken)
     {
-        return await _context.Countries.ToListAsync(cancellationToken);
+        return await _context.Countries
+            .Where(x => query.IsActive == null? x.IsActive : x.IsActive == query.IsActive)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Country> UpdateAsync(Country country, CancellationToken cancellationToken)

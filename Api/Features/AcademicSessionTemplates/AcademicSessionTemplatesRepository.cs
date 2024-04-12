@@ -11,8 +11,7 @@ public interface IAcademicSessionTemplatesRepository
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
 
     Task<IEnumerable<AcademicSessionTemplate>> GetAllAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<AcademicSessionTemplate>> GetListByQueryAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<AcademicSessionTemplate>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicSessionTemplate>> GetListByQueryAsync(AcademicSessionTemplateQuery query, CancellationToken cancellationToken);
     Task<AcademicSessionTemplate> GetAsync(int id, CancellationToken cancellationToken);
 }
 
@@ -101,19 +100,11 @@ public class AcademicSessionTemplatesRepository : IAcademicSessionTemplatesRepos
         return result;
     }
 
-    public async Task<IEnumerable<AcademicSessionTemplate>> GetListByInstitutionAsync(int institutionId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<AcademicSessionTemplate>> GetListByQueryAsync(AcademicSessionTemplateQuery query, CancellationToken cancellationToken)
     {
         var result = await _context.AcademicSessionTemplates
-            .Where(x => x.InstitutionId == institutionId)
-             .Include(x => x.Institution)
-             .ToListAsync(cancellationToken);
-
-        return result;
-    }
-
-    public async Task<IEnumerable<AcademicSessionTemplate>> GetListByQueryAsync(CancellationToken cancellationToken)
-    {
-        var result = await _context.AcademicSessionTemplates
+            .Where(x => (query.IsActive == null ? x.IsActive : x.IsActive == query.IsActive) &&
+                    (query.InstitutionId == null || x.InstitutionId == query.InstitutionId))
             .Include(x => x.Institution)
             .ToListAsync(cancellationToken);
 

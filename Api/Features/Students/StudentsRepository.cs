@@ -84,10 +84,16 @@ public class StudentsRepository : IStudentsRepository
     public async Task<IEnumerable<Student>> GetListByQueryAsync(StudentQuery query, CancellationToken cancellationToken)
     {
         var result = await _context.Students
-            .Where(x => (query.IsActive == null || x.IsActive == query.IsActive) &&
-                        (query.InstitutionId == null || x.InstitutionId == query.InstitutionId))
+            .Where(x => (query.IsActive == null ? x.IsActive : x.IsActive == query.IsActive) &&
+                        (query.InstitutionId == null || x.InstitutionId == query.InstitutionId) &&
+                        (query.ActiveSessionId == null || x.ActiveSessionId == query.ActiveSessionId) &&
+                        (query.ActiveClassId == null || x.ActiveClassId == query.ActiveClassId) &&
+                        (query.StatusId == null || x.StatusId == query.StatusId) &&
+                        (query.StatusReasonId == null || x.StatusReasonId == query.StatusReasonId))
             .Include(x => x.Institution)
             .Include(x => x.Country)
+            .Include(x => x.AcademicSession)
+            .Include(x => x.AcademicClass)
             .ToListAsync(cancellationToken);
 
         return result;
@@ -99,6 +105,8 @@ public class StudentsRepository : IStudentsRepository
             .Where(x => x.Email == email)
             .Include(x => x.Institution)
             .Include(x => x.Country)
+            .Include(x => x.AcademicSession)
+            .Include(x => x.AcademicClass)
             .FirstOrDefaultAsync(cancellationToken);
 
         return result;
@@ -110,6 +118,8 @@ public class StudentsRepository : IStudentsRepository
             .Where(x => x.Id == id)
             .Include(x => x.Institution)
             .Include(x => x.Country)
+            .Include(x => x.AcademicSession)
+            .Include(x => x.AcademicClass)
             .FirstOrDefaultAsync(cancellationToken);
 
         return result;

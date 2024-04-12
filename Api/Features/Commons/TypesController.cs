@@ -104,4 +104,52 @@ public class TypesController : Controller
 
         return Ok(list);
     }
+
+    /// <remarks>
+    ///   Get list of studentstatus
+    /// </remarks>
+    [HttpGet("studentstatus")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<TypeViewModel>))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public ActionResult<List<TypeViewModel>> GetStudentStatusAsync()
+    {
+        var list = Enum.GetValues(typeof(StudentStatus))
+               .Cast<StudentStatus>()
+               .Select(t => new TypeViewModel
+               {
+                   Id = ((int)t),
+                   Name = t.ToString()
+               })
+               .ToList();
+
+        return Ok(list);
+    }
+
+    /// <remarks>
+    ///   Get list of studentstatusreason
+    /// </remarks>
+    [HttpGet("studentstatusreason")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<TypeViewModel>))]
+    [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ApiError))]
+    [ProducesResponseType((int)HttpStatusCode.ServiceUnavailable, Type = typeof(ApiError))]
+    public ActionResult<List<TypeViewModel>> GetStudentStatusReasonAsync()
+    {
+        var list = Enum.GetValues(typeof(StudentStatusReason))
+               .Cast<StudentStatusReason>()
+               .Select(t => new TypeViewModel
+               {
+                   Id = ((int)t),
+                   Name = t.ToString()
+               })
+               .ToList();
+
+        return Ok(list);
+    }
 }
