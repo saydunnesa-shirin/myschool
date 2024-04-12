@@ -9,7 +9,7 @@ public interface IInstitutionsRepository
     Task<Institution> CreateAsync(Institution @new, CancellationToken cancellationToken);
     Task<Institution> UpdateAsync(Institution institution, CancellationToken cancellationToken);
 
-    Task<IEnumerable<Institution>> GetAllAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<Institution>> GetAllAsync(InstitutionQuery query, CancellationToken cancellationToken);
     Task<Institution> GetAsync(int id, CancellationToken cancellationToken);
 
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
@@ -45,9 +45,10 @@ public class InstitutionsRepository : IInstitutionsRepository
         return @new;
     }
 
-    public async Task<IEnumerable<Institution>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Institution>> GetAllAsync(InstitutionQuery query, CancellationToken cancellationToken)
     {
         var result = await _context.Institutions
+            .Where(x => query.IsActive == null ? x.IsActive : x.IsActive == query.IsActive)
             .Include(x => x.Country)
             .ToListAsync(cancellationToken);
 

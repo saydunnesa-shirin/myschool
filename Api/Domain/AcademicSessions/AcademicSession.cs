@@ -1,6 +1,7 @@
 ﻿using Api.Data.Entities;
 using Api.Domain.AcademicClasses;
 using Api.Domain.Institutions;
+using Api.Domain.Students;
 
 namespace Api.Domain.AcademicSessions
 {
@@ -14,5 +15,6 @@ namespace Api.Domain.AcademicSessions
 
         public virtual Institution Institution { get; set; }
         public virtual ICollection<AcademicClass> AcademicClasses { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
     }
 }

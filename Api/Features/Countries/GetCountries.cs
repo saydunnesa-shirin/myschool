@@ -9,6 +9,7 @@ public class GetCountries
     public record Query : IRequest<List<Result>>
     {
         public string Term { get; set; } = string.Empty;
+        public bool? IsActive { get; set; }
     }
 
     public record Result : BaseResult
@@ -32,17 +33,12 @@ public class GetCountries
           Query query,
           CancellationToken cancellationToken)
         {
-            IEnumerable<Country> list;
             List<Result> mappedList = new();
-            if (string.IsNullOrEmpty(query.Term))
+            var countryQuery = new CountryQuery
             {
-                list = await _repository.GetAllAsync(cancellationToken);
-            }
-            else
-            {
-                list = await _repository.GetListByQueryAsync(cancellationToken);
-            }
-
+                IsActive = query.IsActive
+            };
+            var list = await _repository.GetListByQueryAsync(countryQuery, cancellationToken);
 
             foreach (var country in list)
             {

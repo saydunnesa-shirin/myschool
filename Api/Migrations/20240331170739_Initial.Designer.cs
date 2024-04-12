@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(MySchoolContext))]
-    [Migration("20240305171713_Initial")]
+    [Migration("20240331170739_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -326,6 +326,109 @@ namespace Api.Migrations
                     b.ToTable("Institutions");
                 });
 
+            modelBuilder.Entity("Api.Domain.Students.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActiveClassId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ActiveSessionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("AdmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("BloodGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FatherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InstitutionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mobile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MotherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusReasonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActiveClassId");
+
+                    b.HasIndex("ActiveSessionId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("InstitutionId");
+
+                    b.ToTable("Students");
+                });
+
             modelBuilder.Entity("Api.Domain.AcademicClasses.AcademicClass", b =>
                 {
                     b.HasOne("Api.Domain.AcademicSessions.AcademicSession", "AcademicSession")
@@ -403,9 +506,50 @@ namespace Api.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("Api.Domain.Students.Student", b =>
+                {
+                    b.HasOne("Api.Domain.AcademicClasses.AcademicClass", "AcademicClass")
+                        .WithMany("Students")
+                        .HasForeignKey("ActiveClassId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Api.Domain.AcademicSessions.AcademicSession", "AcademicSession")
+                        .WithMany("Students")
+                        .HasForeignKey("ActiveSessionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Api.Domain.Countries.Country", "Country")
+                        .WithMany("Students")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Api.Domain.Institutions.Institution", "Institution")
+                        .WithMany("Students")
+                        .HasForeignKey("InstitutionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AcademicClass");
+
+                    b.Navigation("AcademicSession");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Institution");
+                });
+
+            modelBuilder.Entity("Api.Domain.AcademicClasses.AcademicClass", b =>
+                {
+                    b.Navigation("Students");
+                });
+
             modelBuilder.Entity("Api.Domain.AcademicSessions.AcademicSession", b =>
                 {
                     b.Navigation("AcademicClasses");
+
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("Api.Domain.Countries.Country", b =>
@@ -413,6 +557,8 @@ namespace Api.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("Institutions");
+
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("Api.Domain.Employees.Employee", b =>
@@ -429,6 +575,8 @@ namespace Api.Migrations
                     b.Navigation("AcademicSessions");
 
                     b.Navigation("Employees");
+
+                    b.Navigation("Students");
                 });
 #pragma warning restore 612, 618
         }

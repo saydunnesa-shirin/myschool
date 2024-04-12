@@ -20,6 +20,5 @@ namespace Api.Domain.Institutions
         public virtual ICollection<AcademicClass> AcademicClasses { get; set; }
         public virtual ICollection<Employee> Employees { get; set; }
         public virtual ICollection<Student> Students { get; set; }
-
     }
 }

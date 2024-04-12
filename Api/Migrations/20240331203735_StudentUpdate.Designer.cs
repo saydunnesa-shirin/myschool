@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(MySchoolContext))]
-    [Migration("20240319120114_Student")]
-    partial class Student
+    [Migration("20240331203735_StudentUpdate")]
+    partial class StudentUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -334,6 +334,12 @@ namespace Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ActiveClassId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ActiveSessionId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("AdmissionDate")
                         .HasColumnType("datetime2");
 
@@ -356,10 +362,10 @@ namespace Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FatherName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -380,10 +386,10 @@ namespace Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mobile")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MotherName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
@@ -392,11 +398,16 @@ namespace Api.Migrations
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusReasonId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Street")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UpdatedBy")
@@ -406,6 +417,10 @@ namespace Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActiveClassId");
+
+                    b.HasIndex("ActiveSessionId");
 
                     b.HasIndex("CountryId");
 
@@ -493,6 +508,18 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Domain.Students.Student", b =>
                 {
+                    b.HasOne("Api.Domain.AcademicClasses.AcademicClass", "AcademicClass")
+                        .WithMany("Students")
+                        .HasForeignKey("ActiveClassId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Api.Domain.AcademicSessions.AcademicSession", "AcademicSession")
+                        .WithMany("Students")
+                        .HasForeignKey("ActiveSessionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Api.Domain.Countries.Country", "Country")
                         .WithMany("Students")
                         .HasForeignKey("CountryId")
@@ -504,14 +531,25 @@ namespace Api.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.Navigation("AcademicClass");
+
+                    b.Navigation("AcademicSession");
+
                     b.Navigation("Country");
 
                     b.Navigation("Institution");
                 });
 
+            modelBuilder.Entity("Api.Domain.AcademicClasses.AcademicClass", b =>
+                {
+                    b.Navigation("Students");
+                });
+
             modelBuilder.Entity("Api.Domain.AcademicSessions.AcademicSession", b =>
                 {
                     b.Navigation("AcademicClasses");
+
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("Api.Domain.Countries.Country", b =>

@@ -59,7 +59,7 @@ public class AcademicSessionsRepository : IAcademicSessionsRepository
     public async Task<IEnumerable<AcademicSession>> GetListByQueryAsync(AcademicSessionQuery query, CancellationToken cancellationToken)
     {
         var result = await _context.AcademicSessions
-            .Where(x => (query.IsActive == null || x.IsActive == query.IsActive) &&
+            .Where(x => (query.IsActive == null ? x.IsActive : x.IsActive == query.IsActive) &&
                     (query.InstitutionId == null || x.InstitutionId == query.InstitutionId))
             //.Include(x => x.AcademicClasses)
             .Include(x => x.Institution)

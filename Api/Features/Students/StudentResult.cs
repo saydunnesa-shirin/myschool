@@ -6,6 +6,10 @@ public record StudentResult
     public string StudentId { get; set; } 
     public DateTime AdmissionDate { get; set; }
     public int InstitutionId { get; set; }
+    public int ActiveSessionId { get; set; }
+    public int ActiveClassId { get; set; }
+    public int StatusId { get; set; }
+    public int? StatusReasonId { get; set; }
 
     public string FirstName { get; set; }
     public string LastName { get; set; } 
@@ -28,7 +32,12 @@ public record StudentResult
     public bool IsActive { get; set; }
     public string? CountryName { get; set; }
     public string InstitutionName { get; set; }
-    
+
+    public string ActiveSessionName { get; set; }
+    public string ActiveClassName { get; set; }
+    public string Status { get; set; }
+    public string? StatusReason { get; set; }
+
     public DateTime CreatedDate { get; set; }
     public int CreatedBy { get; set; }
     public DateTime UpdatedDate { get; set; }

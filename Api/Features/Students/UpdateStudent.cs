@@ -13,6 +13,10 @@ public class UpdateStudent
         public string StudentId { get; set; }
         public DateTime AdmissionDate { get; set; }
         public int InstitutionId { get; set; }
+        public int ActiveSessionId { get; set; }
+        public int ActiveClassId { get; set; }
+        public int StatusId { get; set; }
+        public int? StatusReasonId { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -60,6 +64,10 @@ public class UpdateStudent
             studentToUpdate.StudentId = command.StudentId;
             studentToUpdate.AdmissionDate = command.AdmissionDate;
             studentToUpdate.InstitutionId = command.InstitutionId;
+            studentToUpdate.ActiveSessionId = command.ActiveSessionId;
+            studentToUpdate.ActiveClassId = command.ActiveClassId;
+            studentToUpdate.StatusId = command.StatusId;
+            studentToUpdate.StatusReasonId = command.StatusReasonId;
 
             studentToUpdate.FirstName = command.FirstName;
             studentToUpdate.LastName = command.LastName;
@@ -73,7 +81,7 @@ public class UpdateStudent
             studentToUpdate.City = command.City;
             studentToUpdate.State = command.State;
             studentToUpdate.PostalCode = command.PostalCode;
-                
+
             studentToUpdate.FatherName = command.FatherName;
             studentToUpdate.MotherName = command.MotherName;
             studentToUpdate.UpdatedBy = 0;

@@ -10,7 +10,7 @@ public interface IAcademicClassesRepository
     Task<AcademicClass> UpdateAsync(AcademicClass institution, CancellationToken cancellationToken);
 
     Task<IEnumerable<AcademicClass>> GetAllAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<AcademicClass>> GetListByQueryAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AcademicClass>> GetListByQueryAsync(AcademicClassQuery query, CancellationToken cancellationToken);
     Task<AcademicClass> GetAsync(int id, CancellationToken cancellationToken);
 
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
@@ -64,19 +64,21 @@ public class AcademicClassesRepository : IAcademicClassesRepository
             .Include(x => x.Institution)
             .Include(x => x.AcademicSession)
             .Include(x => x.Teacher)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         return result;
     }
 
-    public async Task<IEnumerable<AcademicClass>> GetListByQueryAsync( CancellationToken cancellationToken)
+    public async Task<IEnumerable<AcademicClass>> GetListByQueryAsync(AcademicClassQuery query, CancellationToken cancellationToken)
     {
         var result = await _context.AcademicClasses
-            //.Where(x => x.Id == id)
+            .Where(x => (query.AcademicSessionId == null || x.AcademicSessionId == query.AcademicSessionId) &&
+                        (query.InstitutionId == null || x.InstitutionId == query.InstitutionId) &&
+                        (query.IsActive == null ? x.IsActive : x.IsActive == query.IsActive))
             .Include(x => x.Institution)
             .Include(x => x.AcademicSession)
             .Include(x => x.Teacher)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return result;
     }

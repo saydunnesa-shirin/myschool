@@ -85,7 +85,8 @@ public class EmployeesRepository : IEmployeesRepository
     {
         var result = await _context.Employees
             .Where(x => (query.DesignationId == null || x.DesignationId == query.DesignationId) &&
-                        (query.InstitutionId == null || x.InstitutionId == query.InstitutionId)) 
+                        (query.InstitutionId == null || x.InstitutionId == query.InstitutionId) &&
+                        (query.IsActive == null ? x.IsActive : x.IsActive == query.IsActive))
             .Include(x => x.Institution)
             .Include(x => x.Country)
             .ToListAsync(cancellationToken);

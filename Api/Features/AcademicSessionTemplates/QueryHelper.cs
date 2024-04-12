@@ -1,12 +1,11 @@
-﻿namespace Api.Features.Employees
+﻿namespace Api.Features.AcademicSessionTemplates
 {
     public class QueryHelper
     {
     }
 
-    public class EmployeeQuery
+    public class AcademicSessionTemplateQuery
     {
-        public int? DesignationId { get; set; }
         public int? InstitutionId { get; set; }
         public bool? IsActive { get; set; }
     }

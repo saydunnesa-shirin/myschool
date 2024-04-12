@@ -15,7 +15,7 @@ public class UpdateAcademicSessionWithDetails
         public string? Description { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        //public bool IsActive { get; set; }
+        public bool IsActive { get; set; }
         public List<AcademicClass> AcademicClasses { get; set; }
     }
 

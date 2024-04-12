@@ -10,6 +10,8 @@ public class GetAcademicClasses
     {
         public int? Id { get; set; }
         public string Term { get; set; } = string.Empty;
+        public int? InstitutionId { get; set; }
+        public int? AcademicSessionId { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, List<AcademicClassResult>>
@@ -31,8 +33,14 @@ public class GetAcademicClasses
         {
             IEnumerable<AcademicClass> list;
             List<AcademicClassResult> mappedList = new();
-            
-            list = await _repository.GetListByQueryAsync(cancellationToken);
+
+            var AcademicClassQuery = new AcademicClassQuery()
+            {
+                InstitutionId = query.InstitutionId,
+                AcademicSessionId = query.AcademicSessionId,
+            };
+
+            list = await _repository.GetListByQueryAsync(AcademicClassQuery, cancellationToken);
             foreach (var academicClass in list)
             {
                 var mapped = _mapper.Map<AcademicClass, AcademicClassResult>(academicClass);

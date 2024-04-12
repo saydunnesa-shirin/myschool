@@ -11,12 +11,15 @@ public class CreateStudent
         public string StudentId { get; set; } 
         public DateTime AdmissionDate { get; set; }
         public int InstitutionId { get; set; }
+        public int ActiveSessionId { get; set; }
+        public int ActiveClassId { get; set; }
+        public int StatusId { get; set; }
+        public int? StatusReasonId { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; } 
         public string? Mobile { get; set; }
         public string? Email { get; set; }
-
         public DateTime? DateOfBirth { get; set; }
         public int? GenderId { get; set; }
         public int? BloodGroupId { get; set; }
@@ -58,6 +61,10 @@ public class CreateStudent
                 StudentId = command.StudentId,
                 AdmissionDate = command.AdmissionDate,
                 InstitutionId = command.InstitutionId,
+                ActiveSessionId = command.ActiveSessionId,
+                ActiveClassId = command.ActiveClassId,
+                StatusId = command.StatusId,
+                StatusReasonId = command.StatusReasonId,
 
                 FirstName = command.FirstName,
                 LastName = command.LastName,
