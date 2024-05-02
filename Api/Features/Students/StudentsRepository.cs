@@ -85,11 +85,14 @@ public class StudentsRepository : IStudentsRepository
     {
         var result = await _context.Students
             .Where(x => (query.IsActive == null ? x.IsActive : x.IsActive == query.IsActive) &&
+                        (query.Ids == null || query.Ids.Contains(x.Id)) &&
+                        (string.IsNullOrEmpty(query.FirstName) || x.FirstName.ToLower().Contains(query.FirstName.ToLower())) &&
+                        (query.StatusIds == null || query.StatusIds.Contains(x.StatusId)) &&
+                        (query.StatusReasonIds == null || query.StatusReasonIds.Contains(x.StatusReasonId)) &&
                         (query.InstitutionId == null || x.InstitutionId == query.InstitutionId) &&
-                        (query.ActiveSessionId == null || x.ActiveSessionId == query.ActiveSessionId) &&
-                        (query.ActiveClassId == null || x.ActiveClassId == query.ActiveClassId) &&
-                        (query.StatusId == null || x.StatusId == query.StatusId) &&
-                        (query.StatusReasonId == null || x.StatusReasonId == query.StatusReasonId))
+
+                        (query.ActiveSessionIds == null || query.ActiveSessionIds.Contains(x.ActiveSessionId)) &&
+                        (query.ActiveClassIds == null || query.ActiveClassIds.Contains(x.ActiveClassId)))
             .Include(x => x.Institution)
             .Include(x => x.Country)
             .Include(x => x.AcademicSession)

@@ -4,6 +4,7 @@ using Api.Domain.AcademicSessions;
 using Api.Domain.AcademicSessionTemplates;
 using Api.Domain.Countries;
 using Api.Domain.Employees;
+using Api.Domain.Enrollments;
 using Api.Domain.Students;
 
 namespace Api.Domain.Institutions
@@ -20,5 +21,6 @@ namespace Api.Domain.Institutions
         public virtual ICollection<AcademicClass> AcademicClasses { get; set; }
         public virtual ICollection<Employee> Employees { get; set; }
         public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Api.Data.Entities;
 using Api.Domain.AcademicSessions;
 using Api.Domain.Employees;
+using Api.Domain.Enrollments;
 using Api.Domain.Institutions;
 using Api.Domain.Students;
 
@@ -20,5 +21,6 @@ namespace Api.Domain.AcademicClasses
         //[ForeignKey("TeacherId")]
         public virtual Employee Teacher { get; set; }
         public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Api.Domain.Employees;
 using Api.Domain.Institutions;
 using Microsoft.EntityFrameworkCore;
 using Api.Domain.Students;
+using Api.Domain.Enrollments;
 
 namespace Api.Data.Entities;
 
@@ -23,6 +24,11 @@ public class MySchoolContext : DbContext
             .WithOne(y => y.AcademicClass)
             .HasForeignKey(y => y.ActiveClassId)
             .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<AcademicClass>()
+            .HasMany(x => x.Enrollments)
+            .WithOne(y => y.AcademicClass)
+            .HasForeignKey(y => y.AcademicClassId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<AcademicSession>()
             .HasMany(x => x.AcademicClasses)
@@ -33,6 +39,11 @@ public class MySchoolContext : DbContext
             .HasMany(x => x.Students)
             .WithOne(y => y.AcademicSession)
             .HasForeignKey(y => y.ActiveSessionId)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<AcademicSession>()
+            .HasMany(x => x.Enrollments)
+            .WithOne(y => y.AcademicSession)
+            .HasForeignKey(y => y.AcademicSessionId)
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Country>()
@@ -82,6 +93,11 @@ public class MySchoolContext : DbContext
             .WithOne(y => y.Institution)
             .HasForeignKey(y => y.InstitutionId)
             .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder.Entity<Institution>()
+            .HasMany(x => x.Enrollments)
+            .WithOne(y => y.Institution)
+            .HasForeignKey(y => y.InstitutionId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 
     public DbSet<AcademicClass> AcademicClasses { get; set; }
@@ -91,5 +107,5 @@ public class MySchoolContext : DbContext
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Institution> Institutions { get; set; }
     public DbSet<Student> Students { get; set; }
-
+    public DbSet<Enrollment> Enrollments { get; set; }
 }
