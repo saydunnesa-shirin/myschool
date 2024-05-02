@@ -22,6 +22,7 @@ using Serilog.Events;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Api.Features.Employees;
+using Api.Features.Enrollments;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +87,7 @@ builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 builder.Services.AddScoped<IInstitutionsRepository, InstitutionsRepository>();
 builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
+builder.Services.AddScoped<IEnrollmentsRepository, EnrollmentsRepository>();
 
 // Serilog with Two-stage initialization, latter inits from appsettings.json
 Log.Logger = new LoggerConfiguration()
