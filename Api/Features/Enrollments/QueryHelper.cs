@@ -13,5 +13,6 @@
         public List<int> InstitutionIds { get; set; }
         public List<int> AcademicSessionIds { get; set; }
         public List<int> AcademicClassIds { get; set; }
+        public string? StudentName { get; set; }
     }
 }

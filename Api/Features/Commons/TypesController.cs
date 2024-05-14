@@ -130,9 +130,9 @@ public class TypesController : Controller
     }
 
     /// <remarks>
-    ///   Get list of studentstatusreason
+    ///   Get list of studentstatusreasons
     /// </remarks>
-    [HttpGet("studentstatusreason")]
+    [HttpGet("studentstatusreasons")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<TypeViewModel>))]
     [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(ApiError))]
     [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(ApiError))]

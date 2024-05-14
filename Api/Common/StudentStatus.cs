@@ -4,7 +4,7 @@ namespace Api.Common
 {
     public enum StudentStatus
     {
-        [Display(Name = "New_Registered")]
+        [Display(Name = "New Registered")]
         New_Registered = 1,
         [Display(Name = "Registered")]
         Registered,
