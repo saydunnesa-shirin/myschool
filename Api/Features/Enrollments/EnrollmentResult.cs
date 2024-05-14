@@ -8,10 +8,13 @@ public record EnrollmentResult
     public int AcademicSessionId { get; set; }
     public int AcademicClassId { get; set; }
     public int StudentId { get; set; }
+    public int StatusId { get; set; }
+    public int? StatusReasonId { get; set; }
 
     public string AcademicSessionName { get; set; }
     public string AcademicClassName { get; set; }
     public string StudentName { get; set; }
+    public string StudentIdNumber { get; set; }
 
     public DateTime CreatedDate { get; set; }
     public int CreatedBy { get; set; }

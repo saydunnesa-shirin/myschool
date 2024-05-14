@@ -10,7 +10,8 @@ public interface IEnrollmentsRepository
 {
     Task<Enrollment> CreateAsync(Enrollment newEnrollment, CancellationToken cancellationToken);
     Task<IEnumerable<Enrollment>> CreateAsync(IEnumerable<Enrollment> newEnrollments, CancellationToken cancellationToken);
-    Task<Enrollment> UpdateAsync(Enrollment student, CancellationToken cancellationToken);
+    Task<Enrollment> UpdateAsync(Enrollment enrollment, CancellationToken cancellationToken);
+    Task<Enrollment> UpdateWithStudentStatusAsync(Enrollment enrollment, CancellationToken cancellationToken, int studentStatusId, int studentStatusReasonId);
     Task<int?> DeleteAsync(int id, CancellationToken cancellationToken);
     Task<IEnumerable<Enrollment>> GetListByQueryAsync(EnrollmentQuery query, CancellationToken cancellationToken);
     Task<Enrollment> GetByIdyAsync(int id, CancellationToken cancellationToken);
@@ -79,10 +80,21 @@ public class EnrollmentsRepository : IEnrollmentsRepository
         return newEnrollments;
     }
 
-    public async Task<Enrollment> UpdateAsync(Enrollment student, CancellationToken cancellationToken)
+    public async Task<Enrollment> UpdateAsync(Enrollment enrollment, CancellationToken cancellationToken)
     {
         try
         {
+            var student = _context.Students.Where(s => s.Id == enrollment.StudentId).FirstOrDefault();
+
+            if (student != null && (student.ActiveSessionId != enrollment.AcademicSessionId  || student.ActiveClassId != enrollment.AcademicClassId))
+            {
+                student.ActiveSessionId = enrollment.AcademicSessionId;
+                student.ActiveClassId = enrollment.AcademicClassId;
+                student.UpdatedBy = 1;
+                student.UpdatedDate = DateTime.Now;
+            }
+
+            _ = _context.Enrollments.Update(enrollment);
             _ = await _context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
@@ -90,7 +102,32 @@ public class EnrollmentsRepository : IEnrollmentsRepository
             _logger.LogError(ex, ex.Message);
             throw;
         }
-        return student;
+        return enrollment;
+    }
+
+    public async Task<Enrollment> UpdateWithStudentStatusAsync(Enrollment enrollment, CancellationToken cancellationToken, int studentStatusId, int studentStatusReasonId)
+    {
+        try
+        {
+            var student = _context.Students.Where(s => s.Id == enrollment.StudentId).FirstOrDefault();
+
+            if (student != null && (student.StatusId != studentStatusId || student.StatusReasonId != studentStatusReasonId))
+            {
+                student.StatusId = studentStatusId;
+                student.StatusReasonId = studentStatusReasonId;
+                student.UpdatedBy = 1;
+                student.UpdatedDate = DateTime.Now;
+            }
+
+            _ = _context.Enrollments.Update(enrollment);
+            _ = await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+        return enrollment;
     }
 
     public async Task<int?> DeleteAsync(int id, CancellationToken cancellationToken)
@@ -118,7 +155,9 @@ public class EnrollmentsRepository : IEnrollmentsRepository
     {
         var result = await _context.Enrollments
             .Where(x => (query.IsActive == null ? x.IsActive : x.IsActive == query.IsActive) &&
+                        x.Student.StatusId == (int)StudentStatus.Enrolled &&
                         (query.Ids == null || query.Ids.Contains(x.Id)) &&
+                        (string.IsNullOrEmpty(query.StudentName) || x.Student.FirstName.ToLower().Contains(query.StudentName.ToLower())) &&
                         (query.StudentIds == null || query.StudentIds.Contains(x.StudentId)) &&
                         (query.InstitutionIds == null || query.InstitutionIds.Contains(x.InstitutionId)) &&
                         (query.AcademicSessionIds == null || query.AcademicSessionIds.Contains(x.AcademicSessionId)) &&

@@ -5,15 +5,13 @@ using Enrollment = Api.Domain.Enrollments.Enrollment;
 
 namespace Api.Features.Enrollments;
 
-public class UpdateEnrollment
+public class UpdateEnrollmentWithStudentStatus
 {
     public record Command : IRequest<EnrollmentResult>
     {
         public int Id { get; set; }
-        public DateTime EnrollmentDate { get; set; }
-        public int AcademicSessionId { get; set; }
-        public int AcademicClassId { get; set; }
-        public int StudentId { get; set; }
+        public int StatusId { get; set; }
+        public int StatusReasonId { get; set; }
     }
     
     public class Handler : IRequestHandler<Command, EnrollmentResult>
@@ -37,15 +35,10 @@ public class UpdateEnrollment
           CancellationToken cancellationToken)
         {
             var toUpdate = await _repository.GetByIdyAsync(command.Id, cancellationToken) ?? throw new NotFoundException("Not found");
-
-            toUpdate.EnrollmentDate = command.EnrollmentDate;
-            toUpdate.AcademicSessionId = command.AcademicSessionId;
-            toUpdate.AcademicClassId = command.AcademicClassId;
-
             toUpdate.UpdatedBy = 0;
             toUpdate.UpdatedDate = DateTime.UtcNow;
 
-            var seved = await _repository.UpdateAsync(toUpdate, cancellationToken);
+            var seved = await _repository.UpdateWithStudentStatusAsync(toUpdate, cancellationToken, command.StatusId, command.StatusReasonId);
             var updated = await _repository.GetByIdyAsync(seved.Id, cancellationToken);
 
             var mappedEnrollment = _mapper.Map<Enrollment, EnrollmentResult>(updated);

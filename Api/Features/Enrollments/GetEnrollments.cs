@@ -9,7 +9,12 @@ public class GetEnrollments
     public record Query : IRequest<List<EnrollmentResult>>
     {
         public bool? IsActive { get; set; }
+        public List<int> Ids { get; set; }
         public int InstitutionId { get; set; }
+        public List<int> AcademicSessionIds { get; set; }
+        public List<int> AcademicClassIds { get; set; }
+        public List<int> StudentIds { get; set; }
+        public string? StudentName { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, List<EnrollmentResult>>
@@ -35,7 +40,11 @@ public class GetEnrollments
             var enrollmentQuery = new EnrollmentQuery
             {
                 IsActive = query.IsActive,
-                InstitutionIds = [query.InstitutionId]
+                InstitutionIds = [query.InstitutionId],
+                AcademicClassIds = query.AcademicClassIds,
+                AcademicSessionIds = query.AcademicSessionIds,
+                StudentIds = query.StudentIds,
+                StudentName = query.StudentName
             };
 
             list = await _repository.GetListByQueryAsync(enrollmentQuery, cancellationToken);
