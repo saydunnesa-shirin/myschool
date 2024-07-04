@@ -61,6 +61,7 @@ public class UpdateAcademicSessionWithDetails
                         InstitutionId = item.InstitutionId,
                         TeacherId = item.TeacherId,
                         IsActive = item.IsActive,
+                        TemplateId = item.TemplateId,
                         UpdatedBy = 0,
                         UpdatedDate = DateTime.UtcNow
                     };

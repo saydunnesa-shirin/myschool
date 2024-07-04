@@ -1,5 +1,5 @@
-﻿using Api.Domain.AcademicSessionTemplates;
-using Api.Features.AcademicSessionTemplates;
+﻿using Api.Domain.AcademicClassTemplates;
+using Api.Features.AcademicClassTemplates;
 using AutoMapper;
 
 namespace Api.Domain.SessionTemplate
@@ -13,7 +13,7 @@ namespace Api.Domain.SessionTemplate
 
         private void GetList()
         {
-            CreateMap<AcademicSessionTemplate, AcademicSessionTemplateResult>(MemberList.None)
+            CreateMap<AcademicClassTemplate, AcademicClassTemplateResult>(MemberList.None)
            .ForMember(dest => dest.InstitutionName, opt => opt.MapFrom((src, dest) => src.Institution.Name));
         }
     }

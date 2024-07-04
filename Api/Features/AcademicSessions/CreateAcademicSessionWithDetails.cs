@@ -56,6 +56,7 @@ public class CreateAcademicSessionWithDetails
                         Name = item.Name,
                         InstitutionId = item.InstitutionId,
                         TeacherId = item.TeacherId,
+                        TemplateId = item.TemplateId,
                         IsActive = item.IsActive
                     };
 

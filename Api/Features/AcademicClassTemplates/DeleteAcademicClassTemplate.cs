@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 
-namespace Api.Features.AcademicSessionTemplates;
+namespace Api.Features.AcademicClassTemplates;
 
-public class DeleteAcademicSessionTemplate
+public class DeleteAcademicClassTemplate
 {
     public record Command : IRequest<int?>
     {
@@ -13,10 +13,10 @@ public class DeleteAcademicSessionTemplate
     public class Handler : IRequestHandler<Command, int?>
     {
         private readonly IMapper _mapper;
-        private readonly IAcademicSessionTemplatesRepository _repository;
+        private readonly IAcademicClassTemplatesRepository _repository;
 
         public Handler(
-          IAcademicSessionTemplatesRepository repository,
+          IAcademicClassTemplatesRepository repository,
           IMapper mapper)
         {
             _repository = repository;
