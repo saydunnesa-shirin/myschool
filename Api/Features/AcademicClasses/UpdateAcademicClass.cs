@@ -13,6 +13,7 @@ public class UpdateAcademicClass
         public int AcademicSessionId { get; set; }
         public int? TeacherId { get; set; }
         public string Name { get; set; }
+        public int? TemplateId { get; set; }
     }
 
 
@@ -40,6 +41,7 @@ public class UpdateAcademicClass
                 InstitutionId = command.InstitutionId,
                 AcademicSessionId = command.AcademicSessionId,
                 TeacherId = command.TeacherId,
+                TemplateId = command.TemplateId,
             };
             var updated = await _repository.UpdateAsync(@update, cancellationToken);
 

@@ -13,6 +13,7 @@ public class CreateAcademicClass
         public int AcademicSessionId { get; set; }
         public int? TeacherId { get; set; }
         public string Name { get; set; }
+        public int? TemplateId { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, AcademicClassResult>
@@ -38,7 +39,8 @@ public class CreateAcademicClass
                 Name = command.Name,
                 InstitutionId = command.InstitutionId,
                 AcademicSessionId = command.AcademicSessionId,
-                TeacherId = command.TeacherId
+                TeacherId = command.TeacherId,
+                TemplateId = command.TemplateId,
             };
             var saved = await _repository.CreateAsync(@new, cancellationToken);
 

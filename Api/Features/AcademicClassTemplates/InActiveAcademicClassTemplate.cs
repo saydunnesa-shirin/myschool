@@ -1,33 +1,33 @@
-﻿using Api.Domain.AcademicSessionTemplates;
+﻿using Api.Domain.AcademicClassTemplates;
 using Api.Infrastructure.Exceptions;
 using AutoMapper;
 using MediatR;
 
-namespace Api.Features.AcademicSessionTemplates;
+namespace Api.Features.AcademicClassTemplates;
 
-public class InActiveAcademicSessionTemplate
+public class InActiveAcademicClassTemplate
 {
-    public record Command : IRequest<AcademicSessionTemplateResult>
+    public record Command : IRequest<AcademicClassTemplateResult>
     {
         public int Id { get; set; }
         public string TemplateName { get; set; }
         public int InstitutionId { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command, AcademicSessionTemplateResult>
+    public class Handler : IRequestHandler<Command, AcademicClassTemplateResult>
     {
         private readonly IMapper _mapper;
-        private readonly IAcademicSessionTemplatesRepository _repository;
+        private readonly IAcademicClassTemplatesRepository _repository;
 
         public Handler(
-          IAcademicSessionTemplatesRepository repository,
+          IAcademicClassTemplatesRepository repository,
           IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<AcademicSessionTemplateResult> Handle(
+        public async Task<AcademicClassTemplateResult> Handle(
           Command command,
           CancellationToken cancellationToken)
         {
@@ -41,9 +41,9 @@ public class InActiveAcademicSessionTemplate
 
             var institution = await _repository.GetAsync(updated.Id, cancellationToken);
 
-            var mappedAcademicSessionTemplate = _mapper.Map<AcademicSessionTemplate, AcademicSessionTemplateResult>(institution);
+            var mappedAcademicClassTemplate = _mapper.Map<AcademicClassTemplate, AcademicClassTemplateResult>(institution);
 
-            return mappedAcademicSessionTemplate;
+            return mappedAcademicClassTemplate;
         }
     }
 }

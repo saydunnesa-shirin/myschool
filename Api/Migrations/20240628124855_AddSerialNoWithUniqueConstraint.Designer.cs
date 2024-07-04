@@ -4,6 +4,7 @@ using Api.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(MySchoolContext))]
-    partial class MySchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240628124855_AddSerialNoWithUniqueConstraint")]
+    partial class AddSerialNoWithUniqueConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,54 @@ namespace Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Api.Domain.AcademicClassTemplates.AcademicClassTemplate", b =>
+            modelBuilder.Entity("Api.Domain.AcademicClasses.AcademicClass", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AcademicSessionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InstitutionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AcademicSessionId");
+
+                    b.HasIndex("InstitutionId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("AcademicClasses");
+                });
+
+            modelBuilder.Entity("Api.Domain.AcademicSessionTemplates.AcademicClassTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,62 +109,7 @@ namespace Api.Migrations
 
                     b.HasIndex("InstitutionId");
 
-                    b.HasIndex("SerialNo")
-                        .IsUnique();
-
                     b.ToTable("AcademicClassTemplates", (string)null);
-                });
-
-            modelBuilder.Entity("Api.Domain.AcademicClasses.AcademicClass", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AcademicSessionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("InstitutionId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TemplateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AcademicSessionId");
-
-                    b.HasIndex("InstitutionId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.HasIndex("TemplateId");
-
-                    b.ToTable("AcademicClasses");
                 });
 
             modelBuilder.Entity("Api.Domain.AcademicSessions.AcademicSession", b =>
@@ -488,17 +483,6 @@ namespace Api.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Api.Domain.AcademicClassTemplates.AcademicClassTemplate", b =>
-                {
-                    b.HasOne("Api.Domain.Institutions.Institution", "Institution")
-                        .WithMany("AcademicClassTemplates")
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Institution");
-                });
-
             modelBuilder.Entity("Api.Domain.AcademicClasses.AcademicClass", b =>
                 {
                     b.HasOne("Api.Domain.AcademicSessions.AcademicSession", "AcademicSession")
@@ -518,17 +502,22 @@ namespace Api.Migrations
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Api.Domain.AcademicClassTemplates.AcademicClassTemplate", "Template")
-                        .WithMany()
-                        .HasForeignKey("TemplateId");
-
                     b.Navigation("AcademicSession");
 
                     b.Navigation("Institution");
 
                     b.Navigation("Teacher");
+                });
 
-                    b.Navigation("Template");
+            modelBuilder.Entity("Api.Domain.AcademicSessionTemplates.AcademicClassTemplate", b =>
+                {
+                    b.HasOne("Api.Domain.Institutions.Institution", "Institution")
+                        .WithMany("AcademicSessionTemplates")
+                        .HasForeignKey("InstitutionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Institution");
                 });
 
             modelBuilder.Entity("Api.Domain.AcademicSessions.AcademicSession", b =>
@@ -672,9 +661,9 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Domain.Institutions.Institution", b =>
                 {
-                    b.Navigation("AcademicClassTemplates");
-
                     b.Navigation("AcademicClasses");
+
+                    b.Navigation("AcademicSessionTemplates");
 
                     b.Navigation("AcademicSessions");
 

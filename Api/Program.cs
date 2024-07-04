@@ -2,7 +2,7 @@ using Api.Data.Entities;
 using Api.Extensions;
 using Api.Features.AcademicClasses;
 using Api.Features.AcademicSessions;
-using Api.Features.AcademicSessionTemplates;
+using Api.Features.AcademicClassTemplates;
 using Api.Features.Countries;
 using Api.Features.Students;
 using Api.Features.Institutions;
@@ -82,7 +82,7 @@ builder.Services.AddScoped<ICorrelationIdGenerator, CorrelationIdGenerator>();
 
 builder.Services.AddScoped<IAcademicClassesRepository, AcademicClassesRepository>();
 builder.Services.AddScoped<IAcademicSessionsRepository, AcademicSessionsRepository>();
-builder.Services.AddScoped<IAcademicSessionTemplatesRepository, AcademicSessionTemplatesRepository>();
+builder.Services.AddScoped<IAcademicClassTemplatesRepository, AcademicClassTemplatesRepository>();
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 builder.Services.AddScoped<IInstitutionsRepository, InstitutionsRepository>();

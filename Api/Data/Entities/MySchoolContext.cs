@@ -1,5 +1,5 @@
 using Api.Domain.AcademicSessions;
-using Api.Domain.AcademicSessionTemplates;
+using Api.Domain.AcademicClassTemplates;
 using Api.Domain.AcademicClasses;
 using Api.Domain.Countries;
 using Api.Domain.Employees;
@@ -69,7 +69,7 @@ public class MySchoolContext : DbContext
            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Institution>()
-            .HasMany(x => x.AcademicSessionTemplates)
+            .HasMany(x => x.AcademicClassTemplates)
             .WithOne(y => y.Institution)
             .HasForeignKey(y => y.InstitutionId)
             .OnDelete(DeleteBehavior.NoAction);
@@ -98,11 +98,18 @@ public class MySchoolContext : DbContext
             .WithOne(y => y.Institution)
             .HasForeignKey(y => y.InstitutionId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<AcademicClassTemplate>()
+            .ToTable("AcademicClassTemplates");
+
+        modelBuilder.Entity<AcademicClassTemplate>()
+            .HasIndex(e => e.SerialNo)
+            .IsUnique();
     }
 
     public DbSet<AcademicClass> AcademicClasses { get; set; }
     public DbSet<AcademicSession> AcademicSessions { get; set; }
-    public DbSet<AcademicSessionTemplate> AcademicSessionTemplates { get; set; }
+    public DbSet<AcademicClassTemplate> AcademicClassTemplates { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Institution> Institutions { get; set; }

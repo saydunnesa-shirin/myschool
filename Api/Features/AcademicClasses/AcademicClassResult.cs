@@ -9,4 +9,5 @@ public record AcademicClassResult
     public string Name { get; set; }
     public bool IsActive { get; set; }
     public string TeacherName { get; set; }
+    public int? TemplateId { get; set; }
 }
