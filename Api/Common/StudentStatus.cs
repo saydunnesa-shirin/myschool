@@ -9,6 +9,8 @@ namespace Api.Common
         [Display(Name = "Registered")]
         Registered,
         [Display(Name = "Enrolled")]
-        Enrolled
+        Enrolled,
+        [Display(Name = "Promoted")]
+        Promoted
     }
 }
